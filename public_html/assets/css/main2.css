@@ -1,0 +1,339 @@
+/*===================================================================================*/
+/*  GENERAL - MODERNIZED
+/*===================================================================================*/
+:root {
+  --primary: #3a86ff;
+  --primary-dark: #2563eb;
+  --secondary: #f59e0b;
+  --dark: #1f2937;
+  --light: #f8fafc;
+  --gray: #64748b;
+  --success: #10b981;
+  --danger: #ef4444;
+  --border: #e2e8f0;
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  font-size: 16px;
+  color: #334155;
+  background-color: #ffffff;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+}
+
+a {
+  transition: var(--transition);
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+/* Modern Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  outline: none;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+}
+
+.btn-secondary {
+  background: var(--secondary);
+  color: white;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-outline:hover {
+  background: var(--primary);
+  color: white;
+}
+
+/* Modern Card Styles */
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Modern Navigation */
+.main-header {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-nav .navbar-nav > li > a {
+  position: relative;
+  padding: 20px 16px;
+  font-weight: 500;
+  color: var(--dark);
+}
+
+.header-nav .navbar-nav > li > a:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background: var(--primary);
+  transition: var(--transition);
+  transform: translateX(-50%);
+}
+
+.header-nav .navbar-nav > li > a:hover:after,
+.header-nav .navbar-nav > li.active > a:after {
+  width: 80%;
+}
+
+/* Modern Product Cards */
+.product {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: var(--transition);
+  background: white;
+  box-shadow: var(--card-shadow);
+}
+
+.product:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.product .product-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.product .product-image img {
+  transition: transform 0.5s ease;
+  width: 100%;
+  height: auto;
+}
+
+.product:hover .product-image img {
+  transform: scale(1.05);
+}
+
+.product .product-info {
+  padding: 20px;
+}
+
+.product .product-info .name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--dark);
+}
+
+.product .product-info .price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.product .product-info .price-before-discount {
+  font-size: 16px;
+  color: var(--gray);
+  text-decoration: line-through;
+  margin-left: 8px;
+}
+
+/* Modern Form Elements */
+.unicase-form-control {
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  padding: 12px 16px;
+  font-size: 16px;
+  transition: var(--transition);
+}
+
+.unicase-form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  outline: none;
+}
+
+/* Modern Footer */
+.footer {
+  background: var(--dark);
+  color: white;
+  padding: 60px 0 30px;
+}
+
+.footer .module-heading {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.footer a {
+  color: #cbd5e1;
+}
+
+.footer a:hover {
+  color: white;
+}
+
+/* Modern Hero Slider */
+#owl-main .item {
+  height: 500px;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+}
+
+#owl-main .caption {
+  max-width: 600px;
+}
+
+#owl-main .caption .big-text {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#owl-main .caption .excerpt {
+  font-size: 18px;
+  margin-bottom: 30px;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Modern Utility Classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.section-title:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+/* Modern Responsive Design */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+  
+  #owl-main .caption .big-text {
+    font-size: 32px;
+  }
+  
+  #owl-main .caption .excerpt {
+    font-size: 16px;
+  }
+  
+  .header-nav .navbar-nav > li > a {
+    padding: 12px 16px;
+  }
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --dark: #f8fafc;
+    --light: #1f2937;
+    --border: #374151;
+  }
+  
+  body {
+    background-color: #111827;
+    color: #e5e7eb;
+  }
+  
+  .card,
+  .product {
+    background: #1f2937;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Replace all old color references throughout the CSS */
+.green-text { color: var(--success) !important; }
+.blue-text { color: var(--primary) !important; }
+.red-text { color: var(--danger) !important; }
+.orange-text { color: var(--secondary) !important; }
+
+/* Continue updating all instances of #12cca7 to var(--primary) */
+/* This would need to be done throughout the entire CSS file */

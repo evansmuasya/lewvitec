@@ -1,0 +1,142 @@
+DB Error: Unknown column 'order_Status' in 'field list'
+DB Error: Unknown column 'order_Status' in 'field list'
+DB Error: Unknown column 'order_Status' in 'field list'
+DB Error: Unknown column 'order_Status' in 'field list'
+DB Error: Unknown column 'order_status' in 'field list'
+DB Error: Unknown column 'order_status' in 'field list'
+DB Error: Unknown column 'order_status' in 'field list'
+DB Error: Unknown column 'order_status' in 'field list'
+DB Error: Unknown column 'order_status' in 'field list'
+2025-09-23 09:35:38 | Response: Array
+(
+    [payment_method] => MpesaKE
+    [amount] => 1
+    [created_date] => 2025-09-23T10:27:59.047
+    [confirmation_code] => TINCZ5DPIN
+    [order_tracking_id] => 53a77feb-11a4-47f7-a759-db4bc0f2ad9e
+    [payment_status_description] => Completed
+    [description] => 
+    [message] => Request processed successfully
+    [payment_account] => 2547xxx79337
+    [call_back_url] => https://50b9d9ee5daa.ngrok-free.app/Lewvitec/pesapal_callback.php?OrderTrackingId=53a77feb-11a4-47f7-a759-db4bc0f2ad9e&OrderMerchantReference=ORD_296_1758612451
+    [status_code] => 1
+    [merchant_reference] => ORD_296_1758612451
+    [account_number] => 
+    [payment_status_code] => 
+    [currency] => KES
+    [error] => Array
+        (
+            [error_type] => 
+            [code] => 
+            [message] => 
+        )
+
+    [status] => 200
+)
+
+DB Error: Unknown column 'order_status' in 'field list'
+2025-09-23 09:37:22 | Response: Array
+(
+    [payment_method] => MpesaKE
+    [amount] => 1
+    [created_date] => 2025-09-23T10:37:07.427
+    [confirmation_code] => TINCZ5DR6Q
+    [order_tracking_id] => 268e40d3-63e5-4375-9ebe-db4b0179f089
+    [payment_status_description] => Completed
+    [description] => 
+    [message] => Request processed successfully
+    [payment_account] => 2547xxx79337
+    [call_back_url] => https://50b9d9ee5daa.ngrok-free.app/Lewvitec/pesapal_callback.php?OrderTrackingId=268e40d3-63e5-4375-9ebe-db4b0179f089&OrderMerchantReference=ORD_297_1758613002
+    [status_code] => 1
+    [merchant_reference] => ORD_297_1758613002
+    [account_number] => 
+    [payment_status_code] => 
+    [currency] => KES
+    [error] => Array
+        (
+            [error_type] => 
+            [code] => 
+            [message] => 
+        )
+
+    [status] => 200
+)
+
+DB Error: Unknown column 'order_status' in 'field list'
+DB Error: Unknown column 'payment_status' in 'field list'
+DB Error: Unknown column 'payment_status' in 'field list'
+DB Error: Unknown column 'order_status' in 'field list'
+DB Error: Unknown column 'order_status' in 'field list'
+2025-09-23 10:09:47 | Callback received - TrackingID: e3b7c0b8-7196-4652-b409-db4b368ba6ed, MerchantRef: ORD_301_1758614948
+2025-09-23 10:09:48 | Status Check - HTTP Code: 200, Response: Array
+(
+    [payment_method] => MpesaKE
+    [amount] => 1
+    [created_date] => 2025-09-23T11:09:33.307
+    [confirmation_code] => TINCZ5E3WL
+    [order_tracking_id] => e3b7c0b8-7196-4652-b409-db4b368ba6ed
+    [payment_status_description] => Completed
+    [description] => 
+    [message] => Request processed successfully
+    [payment_account] => 2547xxx79337
+    [call_back_url] => https://50b9d9ee5daa.ngrok-free.app/Lewvitec/pesapal_callback.php?OrderTrackingId=e3b7c0b8-7196-4652-b409-db4b368ba6ed&OrderMerchantReference=ORD_301_1758614948
+    [status_code] => 1
+    [merchant_reference] => ORD_301_1758614948
+    [account_number] => 
+    [payment_status_code] => 
+    [currency] => KES
+    [error] => Array
+        (
+            [error_type] => 
+            [code] => 
+            [message] => 
+        )
+
+    [status] => 200
+)
+
+DB Prepare failed: Unknown column 'order_status' in 'field list'
+2025-09-23 10:15:09 | Callback received - TrackingID: e3b7c0b8-7196-4652-b409-db4b368ba6ed, MerchantRef: ORD_301_1758614948
+2025-09-23 10:15:11 | Full API Response: Array
+(
+    [payment_method] => MpesaKE
+    [amount] => 1
+    [created_date] => 2025-09-23T11:09:33.307
+    [confirmation_code] => TINCZ5E3WL
+    [order_tracking_id] => e3b7c0b8-7196-4652-b409-db4b368ba6ed
+    [payment_status_description] => Completed
+    [description] => 
+    [message] => Request processed successfully
+    [payment_account] => 2547xxx79337
+    [call_back_url] => https://50b9d9ee5daa.ngrok-free.app/Lewvitec/pesapal_callback.php?OrderTrackingId=e3b7c0b8-7196-4652-b409-db4b368ba6ed&OrderMerchantReference=ORD_301_1758614948
+    [status_code] => 1
+    [merchant_reference] => ORD_301_1758614948
+    [account_number] => 
+    [payment_status_code] => 
+    [currency] => KES
+    [error] => Array
+        (
+            [error_type] => 
+            [code] => 
+            [message] => 
+        )
+
+    [status] => 200
+)
+
+Extracted Values - Status: 200, Method: MpesaKE, Amount: 1, Confirmation: TINCZ5E3WL
+DB Prepare Error: Unknown column 'order_status' in 'field list'
+Updating order #301 with: {"status":"COMPLETED","tracking_id":"e3b7c0b8-7196-4652-b409-db4b368ba6ed","payment_method":"MpesaKE","amount":1,"confirmation_code":"TINCZ5E3WL"}
+DB Prepare Error: Unknown column 'order_status' in 'field list'
+Updating order #301 with: {"status":"COMPLETED","tracking_id":"e3b7c0b8-7196-4652-b409-db4b368ba6ed","payment_method":"MpesaKE","amount":1,"confirmation_code":"TINCZ5E3WL"}
+DB Prepare Error: Unknown column 'order_status' in 'field list'
+Updating order #302 with: {"status":"COMPLETED","tracking_id":"2ac7a355-60db-41e7-9312-db4bdda70a62","payment_method":"MpesaKE","amount":1,"confirmation_code":"TINCZ5DXYB"}
+Updating order #302 with: {"status":"COMPLETED","tracking_id":"2ac7a355-60db-41e7-9312-db4bdda70a62","payment_method":"MpesaKE","amount":1,"confirmation_code":"TINCZ5DXYB"}
+Updating order #303 with: {"status":"FAILED","tracking_id":"1f5110f9-7635-475c-97f0-db4b0e7e5dec","payment_method":"MpesaKE","amount":1,"confirmation_code":"22425522"}
+Updating order #304 with: {"status":"COMPLETED","tracking_id":"bcede22c-10f6-4b94-979c-db4b947cb4a9","payment_method":"MpesaKE","amount":1,"confirmation_code":"TINCZ5E9NB"}
+Updating order #305 with: {"status":"COMPLETED","tracking_id":"f071b08e-51eb-420f-a122-db4bba60eeb9","payment_method":"MpesaKE","amount":1,"confirmation_code":"TINCZ5EL3B"}
+Updating order #306 with: {"status":"COMPLETED","tracking_id":"7b80ffa1-d557-4dd3-a093-db4b1135ca03","payment_method":"MpesaKE","amount":1,"confirmation_code":"TINCZ5EPO1"}
+Updating order #307 with: {"status":"FAILED","tracking_id":"8111f538-b46b-4496-ab1c-db4a987983a2","payment_method":"MpesaKE","amount":8,"confirmation_code":"38167397"}
+Updating order #308 with: {"status":"COMPLETED","tracking_id":"24aa5f47-1574-4d3a-95f1-db4acd02f528","payment_method":"MpesaKE","amount":8,"confirmation_code":"TIOCZ5HJYP"}
+Updating order #309 with: {"status":"COMPLETED","tracking_id":"2b035948-9cb5-4f6c-83eb-db4ac8dc9612","payment_method":"MpesaKE","amount":8,"confirmation_code":"TIOCZ5HXEB"}
+Updating order #309 with: {"status":"COMPLETED","tracking_id":"2b035948-9cb5-4f6c-83eb-db4ac8dc9612","payment_method":"MpesaKE","amount":8,"confirmation_code":"TIOCZ5HXEB"}

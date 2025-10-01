@@ -1,0 +1,1190 @@
+2025-09-18 11:14:07 - 
+2025-09-18 12:15:37 - 
+[2025-09-18 12:25:24] Array
+(
+    [GET] => Array
+        (
+            [OrderTrackingId] => 6b3b30c9-4213-4df1-9298-db50375ea6db
+            [OrderMerchantReference] => ORD_267_1758190473
+        )
+
+    [POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [cart] => Array
+                (
+                    [35] => Array
+                        (
+                            [quantity] => 2
+                            [price] => 10
+                        )
+
+                )
+
+            [qnty] => 2
+            [cart_total] => 20
+            [cart_items] => Array
+                (
+                    [0] => 35
+                )
+
+            [cart_quantity] => 2
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 20
+            [errmsg] => 
+            [login] => test@gmail.com
+            [id] => 7
+            [username] => test3
+        )
+
+)
+
+[2025-09-18 12:26:19] Array
+(
+    [GET] => Array
+        (
+            [OrderTrackingId] => 6b3b30c9-4213-4df1-9298-db50375ea6db
+            [OrderMerchantReference] => ORD_267_1758190473
+        )
+
+    [POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [cart] => Array
+                (
+                    [35] => Array
+                        (
+                            [quantity] => 2
+                            [price] => 10
+                        )
+
+                )
+
+            [qnty] => 2
+            [cart_total] => 20
+            [cart_items] => Array
+                (
+                    [0] => 35
+                )
+
+            [cart_quantity] => 2
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 20
+            [errmsg] => 
+            [login] => test@gmail.com
+            [id] => 7
+            [username] => test3
+        )
+
+)
+
+[2025-09-18 12:29:56] Array
+(
+    [GET] => Array
+        (
+            [OrderTrackingId] => 6b3b30c9-4213-4df1-9298-db50375ea6db
+            [OrderMerchantReference] => ORD_267_1758190473
+        )
+
+    [POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [cart] => Array
+                (
+                    [35] => Array
+                        (
+                            [quantity] => 2
+                            [price] => 10
+                        )
+
+                )
+
+            [qnty] => 2
+            [cart_total] => 20
+            [cart_items] => Array
+                (
+                    [0] => 35
+                )
+
+            [cart_quantity] => 2
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 20
+            [errmsg] => 
+            [login] => test@gmail.com
+            [id] => 7
+            [username] => test3
+        )
+
+)
+
+[2025-09-18 12:29:59] Array
+(
+    [GET] => Array
+        (
+            [OrderTrackingId] => 6b3b30c9-4213-4df1-9298-db50375ea6db
+            [OrderMerchantReference] => ORD_267_1758190473
+        )
+
+    [POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [cart] => Array
+                (
+                    [35] => Array
+                        (
+                            [quantity] => 2
+                            [price] => 10
+                        )
+
+                )
+
+            [qnty] => 2
+            [cart_total] => 20
+            [cart_items] => Array
+                (
+                    [0] => 35
+                )
+
+            [cart_quantity] => 2
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 20
+            [errmsg] => 
+            [login] => test@gmail.com
+            [id] => 7
+            [username] => test3
+        )
+
+)
+
+[2025-09-18 12:30:23] Array
+(
+    [GET] => Array
+        (
+            [OrderTrackingId] => f9085ac4-2b29-4c07-848a-db50f3b119d4
+            [OrderMerchantReference] => order-258-1758186642
+        )
+
+    [POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [cart] => Array
+                (
+                    [35] => Array
+                        (
+                            [quantity] => 2
+                            [price] => 10
+                        )
+
+                )
+
+            [qnty] => 2
+            [cart_total] => 20
+            [cart_items] => Array
+                (
+                    [0] => 35
+                )
+
+            [cart_quantity] => 2
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 20
+            [errmsg] => 
+            [login] => test@gmail.com
+            [id] => 7
+            [username] => test3
+        )
+
+)
+
+[2025-09-18 12:30:28] Array
+(
+    [GET] => Array
+        (
+            [OrderTrackingId] => f9085ac4-2b29-4c07-848a-db50f3b119d4
+            [OrderMerchantReference] => order-258-1758186642
+        )
+
+    [POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [cart] => Array
+                (
+                    [35] => Array
+                        (
+                            [quantity] => 2
+                            [price] => 10
+                        )
+
+                )
+
+            [qnty] => 2
+            [cart_total] => 20
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 10
+                            [quantity] => 2
+                            [shipping] => 0
+                            [subtotal] => 20
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 2
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 20
+            [errmsg] => 
+            [login] => test@gmail.com
+            [id] => 7
+            [username] => test3
+        )
+
+)
+
+[2025-09-18 12:30:39] Array
+(
+    [GET] => Array
+        (
+            [OrderTrackingId] => f9085ac4-2b29-4c07-848a-db50f3b119d4
+            [OrderMerchantReference] => order-258-1758186642
+        )
+
+    [POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [cart] => Array
+                (
+                    [35] => Array
+                        (
+                            [quantity] => 2
+                            [price] => 10
+                        )
+
+                )
+
+            [qnty] => 2
+            [cart_total] => 20
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 10
+                            [quantity] => 2
+                            [shipping] => 0
+                            [subtotal] => 20
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 2
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 20
+            [errmsg] => 
+            [login] => test@gmail.com
+            [id] => 7
+            [username] => test3
+        )
+
+)
+
+[2025-09-18 12:30:43] Array
+(
+    [GET] => Array
+        (
+            [OrderTrackingId] => f9085ac4-2b29-4c07-848a-db50f3b119d4
+            [OrderMerchantReference] => order-258-1758186642
+        )
+
+    [POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [cart] => Array
+                (
+                    [35] => Array
+                        (
+                            [quantity] => 2
+                            [price] => 10
+                        )
+
+                )
+
+            [qnty] => 2
+            [cart_total] => 20
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 10
+                            [quantity] => 2
+                            [shipping] => 0
+                            [subtotal] => 20
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 2
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 20
+            [errmsg] => 
+            [login] => test@gmail.com
+            [id] => 7
+            [username] => test3
+        )
+
+)
+
+[2025-09-18 12:32:56] Array
+(
+    [GET] => Array
+        (
+            [OrderTrackingId] => 22fa09d2-898b-4cb5-82b1-db500861b387
+            [OrderMerchantReference] => ORD_268_1758191527
+        )
+
+    [POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [qnty] => 1
+            [cart_total] => 10
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 10
+                            [quantity] => 1
+                            [shipping] => 0
+                            [subtotal] => 10
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 1
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 10
+            [errmsg] => 
+            [login] => muasyaevans@gmail.com
+            [id] => 7
+            [username] => evans mulwa
+            [order_id] => 268
+            [billing_info] => Array
+                (
+                    [email_address] => muasyaevans@gmail.com
+                    [phone_number] => 254234567890
+                    [country_code] => KE
+                    [first_name] => evans
+                    [last_name] => mulwa
+                    [line_1] => Nairobi
+                    [city] => Nairobi
+                    [state] => Nairobi
+                    [postal_code] => 100
+                )
+
+            [pesapal_tracking_id] => 22fa09d2-898b-4cb5-82b1-db500861b387
+            [pesapal_merchant_reference] => ORD_268_1758191527
+        )
+
+)
+
+[2025-09-18 12:33:29] Array
+(
+    [GET] => Array
+        (
+            [OrderTrackingId] => 22fa09d2-898b-4cb5-82b1-db500861b387
+            [OrderMerchantReference] => ORD_268_1758191527
+        )
+
+    [POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [qnty] => 1
+            [cart_total] => 10
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 10
+                            [quantity] => 1
+                            [shipping] => 0
+                            [subtotal] => 10
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 1
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 10
+            [errmsg] => 
+            [login] => muasyaevans@gmail.com
+            [id] => 7
+            [username] => evans mulwa
+            [order_id] => 268
+            [billing_info] => Array
+                (
+                    [email_address] => muasyaevans@gmail.com
+                    [phone_number] => 254234567890
+                    [country_code] => KE
+                    [first_name] => evans
+                    [last_name] => mulwa
+                    [line_1] => Nairobi
+                    [city] => Nairobi
+                    [state] => Nairobi
+                    [postal_code] => 100
+                )
+
+            [pesapal_tracking_id] => 22fa09d2-898b-4cb5-82b1-db500861b387
+            [pesapal_merchant_reference] => ORD_268_1758191527
+        )
+
+)
+
+[2025-09-18 12:39:20] Array
+(
+    [GET] => Array
+        (
+            [OrderTrackingId] => f6ef673f-2861-47ab-b7e7-db505bf2f442
+            [OrderMerchantReference] => ORD_269_1758191910
+        )
+
+    [POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [qnty] => 1
+            [cart_total] => 1
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 1
+                            [quantity] => 1
+                            [shipping] => 0
+                            [subtotal] => 1
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 1
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 1
+            [errmsg] => 
+            [login] => muasyaevans@gmail.com
+            [id] => 7
+            [username] => evans mulwa
+            [order_id] => 269
+            [billing_info] => Array
+                (
+                    [email_address] => muasyaevans@gmail.com
+                    [phone_number] => 254234567890
+                    [country_code] => KE
+                    [first_name] => evans
+                    [last_name] => mulwa
+                    [line_1] => Nairobi
+                    [city] => Nairobi
+                    [state] => Nairobi
+                    [postal_code] => 100
+                )
+
+            [pesapal_tracking_id] => f6ef673f-2861-47ab-b7e7-db505bf2f442
+            [pesapal_merchant_reference] => ORD_269_1758191910
+        )
+
+)
+
+[2025-09-18 12:47:28] Array
+(
+    [GET] => Array
+        (
+            [OrderTrackingId] => 1b427ffc-f042-4baa-8136-db5005f11def
+            [OrderMerchantReference] => ORD_270_1758192319
+        )
+
+    [POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [errmsg] => 
+            [login] => sunvolttechandpowersolutions@gmail.com
+            [id] => 12
+            [username] => Evans Muasya
+            [qnty] => 1
+            [cart_total] => 1
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 1
+                            [quantity] => 1
+                            [shipping] => 0
+                            [subtotal] => 1
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 1
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 1
+            [message] => Product quantity increased in cart
+            [order_id] => 270
+            [billing_info] => Array
+                (
+                    [email_address] => sunvolttechandpowersolutions@gmail.com
+                    [phone_number] => 254776791369
+                    [country_code] => KE
+                    [first_name] => Evans
+                    [last_name] => Muasya
+                    [line_1] => Nairobi
+                    [city] => Nairobi
+                    [state] => Nairobi
+                    [postal_code] => 200
+                )
+
+            [pesapal_tracking_id] => 1b427ffc-f042-4baa-8136-db5005f11def
+            [pesapal_merchant_reference] => ORD_270_1758192319
+        )
+
+)
+
+[2025-09-18 12:50:39] Array
+(
+    [RAW_GET] => Array
+        (
+            [OrderTrackingId] => 1b427ffc-f042-4baa-8136-db5005f11def
+            [OrderMerchantReference] => ORD_270_1758192319
+        )
+
+    [RAW_POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [errmsg] => 
+            [login] => sunvolttechandpowersolutions@gmail.com
+            [id] => 12
+            [username] => Evans Muasya
+            [qnty] => 1
+            [cart_total] => 1
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 1
+                            [quantity] => 1
+                            [shipping] => 0
+                            [subtotal] => 1
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 1
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 1
+            [message] => Product quantity increased in cart
+            [order_id] => 270
+            [billing_info] => Array
+                (
+                    [email_address] => sunvolttechandpowersolutions@gmail.com
+                    [phone_number] => 254776791369
+                    [country_code] => KE
+                    [first_name] => Evans
+                    [last_name] => Muasya
+                    [line_1] => Nairobi
+                    [city] => Nairobi
+                    [state] => Nairobi
+                    [postal_code] => 200
+                )
+
+            [pesapal_tracking_id] => 1b427ffc-f042-4baa-8136-db5005f11def
+            [pesapal_merchant_reference] => ORD_270_1758192319
+        )
+
+)
+
+[2025-09-18 12:50:39] Array
+(
+    [error] => Missing required callback parameters
+)
+
+[2025-09-18 12:56:15] Array
+(
+    [RAW_GET] => Array
+        (
+            [OrderTrackingId] => 0504b2f8-1248-417d-a28f-db501ceeb733
+            [OrderMerchantReference] => ORD_271_1758192934
+        )
+
+    [RAW_POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [errmsg] => 
+            [login] => sunvolttechandpowersolutions@gmail.com
+            [id] => 12
+            [username] => Evans Muasya
+            [qnty] => 1
+            [cart_total] => 1
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 1
+                            [quantity] => 1
+                            [shipping] => 0
+                            [subtotal] => 1
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 1
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 1
+            [message] => Product quantity increased in cart
+            [order_id] => 271
+            [billing_info] => Array
+                (
+                    [email_address] => sunvolttechandpowersolutions@gmail.com
+                    [phone_number] => 254776791369
+                    [country_code] => KE
+                    [first_name] => Evans
+                    [last_name] => Muasya
+                    [line_1] => Nairobi
+                    [city] => Nairobi
+                    [state] => Nairobi
+                    [postal_code] => 200
+                )
+
+            [pesapal_tracking_id] => 0504b2f8-1248-417d-a28f-db501ceeb733
+            [pesapal_merchant_reference] => ORD_271_1758192934
+        )
+
+)
+
+[2025-09-18 12:56:15] Array
+(
+    [error] => Missing required callback parameters
+)
+
+[2025-09-18 12:56:27] Array
+(
+    [RAW_GET] => Array
+        (
+            [OrderTrackingId] => 0504b2f8-1248-417d-a28f-db501ceeb733
+            [OrderMerchantReference] => ORD_271_1758192934
+        )
+
+    [RAW_POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [errmsg] => 
+            [login] => sunvolttechandpowersolutions@gmail.com
+            [id] => 12
+            [username] => Evans Muasya
+            [qnty] => 1
+            [cart_total] => 1
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 1
+                            [quantity] => 1
+                            [shipping] => 0
+                            [subtotal] => 1
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 1
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 1
+            [message] => Product quantity increased in cart
+            [order_id] => 271
+            [billing_info] => Array
+                (
+                    [email_address] => sunvolttechandpowersolutions@gmail.com
+                    [phone_number] => 254776791369
+                    [country_code] => KE
+                    [first_name] => Evans
+                    [last_name] => Muasya
+                    [line_1] => Nairobi
+                    [city] => Nairobi
+                    [state] => Nairobi
+                    [postal_code] => 200
+                )
+
+            [pesapal_tracking_id] => 0504b2f8-1248-417d-a28f-db501ceeb733
+            [pesapal_merchant_reference] => ORD_271_1758192934
+        )
+
+)
+
+[2025-09-18 12:56:27] Array
+(
+    [error] => Missing required callback parameters
+)
+
+[2025-09-18 13:00:06] Array
+(
+    [RAW_GET] => Array
+        (
+            [OrderTrackingId] => 0504b2f8-1248-417d-a28f-db501ceeb733
+            [OrderMerchantReference] => ORD_271_1758192934
+        )
+
+    [RAW_POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [errmsg] => 
+            [login] => sunvolttechandpowersolutions@gmail.com
+            [id] => 12
+            [username] => Evans Muasya
+            [qnty] => 1
+            [cart_total] => 1
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 1
+                            [quantity] => 1
+                            [shipping] => 0
+                            [subtotal] => 1
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 1
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 1
+            [message] => Product quantity increased in cart
+            [order_id] => 271
+            [billing_info] => Array
+                (
+                    [email_address] => sunvolttechandpowersolutions@gmail.com
+                    [phone_number] => 254776791369
+                    [country_code] => KE
+                    [first_name] => Evans
+                    [last_name] => Muasya
+                    [line_1] => Nairobi
+                    [city] => Nairobi
+                    [state] => Nairobi
+                    [postal_code] => 200
+                )
+
+            [pesapal_tracking_id] => 0504b2f8-1248-417d-a28f-db501ceeb733
+            [pesapal_merchant_reference] => ORD_271_1758192934
+        )
+
+)
+
+[2025-09-18 13:00:06] Array
+(
+    [error] => Missing required callback parameters
+)
+
+[2025-09-18 13:01:29] Array
+(
+    [RAW_GET] => Array
+        (
+            [OrderTrackingId] => bf9a4fdb-8f42-4649-bef8-db50706f2892
+            [OrderMerchantReference] => ORD_272_1758193248
+        )
+
+    [RAW_POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [errmsg] => 
+            [login] => sunvolttechandpowersolutions@gmail.com
+            [id] => 12
+            [username] => Evans Muasya
+            [qnty] => 1
+            [cart_total] => 1
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 1
+                            [quantity] => 1
+                            [shipping] => 0
+                            [subtotal] => 1
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 1
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 1
+            [message] => Product quantity increased in cart
+            [order_id] => 272
+            [billing_info] => Array
+                (
+                    [email_address] => sunvolttechandpowersolutions@gmail.com
+                    [phone_number] => 254776791369
+                    [country_code] => KE
+                    [first_name] => Evans
+                    [last_name] => Muasya
+                    [line_1] => Nairobi
+                    [city] => Nairobi
+                    [state] => Nairobi
+                    [postal_code] => 200
+                )
+
+            [pesapal_tracking_id] => bf9a4fdb-8f42-4649-bef8-db50706f2892
+            [pesapal_merchant_reference] => ORD_272_1758193248
+        )
+
+)
+
+[2025-09-18 13:01:29] Array
+(
+    [error] => Missing required callback parameters
+)
+
+[2025-09-18 13:15:27] Array
+(
+    [RAW_GET] => Array
+        (
+            [OrderTrackingId] => f6ef673f-2861-47ab-b7e7-db505bf2f442
+            [OrderMerchantReference] => ORD_269_1758191910
+        )
+
+    [RAW_POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [qnty] => 1
+            [cart_total] => 1
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 1
+                            [quantity] => 1
+                            [shipping] => 0
+                            [subtotal] => 1
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 1
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 1
+            [errmsg] => 
+            [login] => muasyaevans@gmail.com
+            [id] => 7
+            [username] => evans mulwa
+            [order_id] => 269
+            [billing_info] => Array
+                (
+                    [email_address] => muasyaevans@gmail.com
+                    [phone_number] => 254234567890
+                    [country_code] => KE
+                    [first_name] => evans
+                    [last_name] => mulwa
+                    [line_1] => Nairobi
+                    [city] => Nairobi
+                    [state] => Nairobi
+                    [postal_code] => 100
+                )
+
+            [pesapal_tracking_id] => f6ef673f-2861-47ab-b7e7-db505bf2f442
+            [pesapal_merchant_reference] => ORD_269_1758191910
+        )
+
+)
+
+[2025-09-18 13:15:27] Array
+(
+    [error] => Missing required callback parameters
+)
+
+[2025-09-18 13:20:48] Array
+(
+    [RAW_GET] => Array
+        (
+            [OrderTrackingId] => dcb471d6-5e5c-4294-b91e-db504b05a27e
+            [OrderMerchantReference] => ORD_273_1758194277
+        )
+
+    [RAW_POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [qnty] => 1
+            [cart_total] => 1
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 1
+                            [quantity] => 1
+                            [shipping] => 0
+                            [subtotal] => 1
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 1
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 1
+            [errmsg] => 
+            [login] => muasyaevans@gmail.com
+            [id] => 7
+            [username] => evans mulwa
+            [order_id] => 273
+            [billing_info] => Array
+                (
+                    [email_address] => muasyaevans@gmail.com
+                    [phone_number] => 254234567890
+                    [country_code] => KE
+                    [first_name] => evans
+                    [last_name] => mulwa
+                    [line_1] => Nairobi
+                    [city] => Nairobi
+                    [state] => Nairobi
+                    [postal_code] => 100
+                )
+
+            [pesapal_tracking_id] => dcb471d6-5e5c-4294-b91e-db504b05a27e
+            [pesapal_merchant_reference] => ORD_273_1758194277
+        )
+
+)
+
+[2025-09-18 13:20:48] Array
+(
+    [error] => Missing required callback parameters
+)
+
+[2025-09-18 13:22:28] Array
+(
+    [RAW_GET] => Array
+        (
+            [OrderTrackingId] => dcb471d6-5e5c-4294-b91e-db504b05a27e
+            [OrderMerchantReference] => ORD_273_1758194277
+        )
+
+    [RAW_POST] => Array
+        (
+        )
+
+    [SESSION] => Array
+        (
+            [qnty] => 1
+            [cart_total] => 1
+            [cart_items] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 35
+                            [name] => tttttt67
+                            [price] => 1
+                            [quantity] => 1
+                            [shipping] => 0
+                            [subtotal] => 1
+                            [image] => 610ckzKIwnL._SY879_.webp
+                        )
+
+                )
+
+            [cart_quantity] => 1
+            [pid] => Array
+                (
+                    [0] => 35
+                )
+
+            [tp] => 1
+            [errmsg] => 
+            [login] => muasyaevans@gmail.com
+            [id] => 7
+            [username] => evans mulwa
+            [order_id] => 273
+            [billing_info] => Array
+                (
+                    [email_address] => muasyaevans@gmail.com
+                    [phone_number] => 254234567890
+                    [country_code] => KE
+                    [first_name] => evans
+                    [last_name] => mulwa
+                    [line_1] => Nairobi
+                    [city] => Nairobi
+                    [state] => Nairobi
+                    [postal_code] => 100
+                )
+
+            [pesapal_tracking_id] => dcb471d6-5e5c-4294-b91e-db504b05a27e
+            [pesapal_merchant_reference] => ORD_273_1758194277
+        )
+
+)
+
+[2025-09-18 13:22:28] Array
+(
+    [error] => Missing required callback parameters
+)
+

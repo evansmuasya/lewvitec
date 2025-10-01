@@ -1,0 +1,78 @@
+=== 2025-09-18T10:34:29+02:00 ===
+ORDER_ID: 245
+AMOUNT_RAW: '20'
+AMOUNT_CLEAN: 20.0
+PAYLOAD_BEFORE_SEND:
+{
+    "id": "69b27ede-4748-4535-84de-db502acc6510",
+    "currency": "KES",
+    "amount": 20,
+    "description": "Order #245",
+    "callback_url": "https://8e086d3ddab5.ngrok-free.app/Lewvitec/pesapal_callback.php",
+    "notification_id": "69b27ede-4748-4535-84de-db502acc6510",
+    "billing_address": {
+        "email_address": "test@gmail.com",
+        "phone_number": "254700000000",
+        "country_code": "KE",
+        "first_name": "John",
+        "last_name": "Doe",
+        "line_1": "nairobi3333"
+    }
+}
+PESAPAL RESPONSE:
+{"order_tracking_id":"44c8548a-9d7e-4eb3-9b3c-db509e749962","merchant_reference":"69b27ede-4748-4535-84de-db502acc6510","redirect_url":"https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=44c8548a-9d7e-4eb3-9b3c-db509e749962","error":null,"status":"200"}
+
+REDIRECT_URL: https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=44c8548a-9d7e-4eb3-9b3c-db509e749962
+
+=== 2025-09-18T10:35:13+02:00 ===
+ORDER_ID: 246
+AMOUNT_RAW: '20'
+AMOUNT_CLEAN: 20.0
+PAYLOAD_BEFORE_SEND:
+{
+    "id": "69b27ede-4748-4535-84de-db502acc6510",
+    "currency": "KES",
+    "amount": 20,
+    "description": "Order #246",
+    "callback_url": "https://8e086d3ddab5.ngrok-free.app/Lewvitec/pesapal_callback.php",
+    "notification_id": "69b27ede-4748-4535-84de-db502acc6510",
+    "billing_address": {
+        "email_address": "evansmuasya363@gmail.com",
+        "phone_number": "254700000000",
+        "country_code": "KE",
+        "first_name": "John",
+        "last_name": "Doe",
+        "line_1": "00200"
+    }
+}
+PESAPAL RESPONSE:
+{"order_tracking_id":"44c8548a-9d7e-4eb3-9b3c-db509e749962","merchant_reference":"69b27ede-4748-4535-84de-db502acc6510","redirect_url":"https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=44c8548a-9d7e-4eb3-9b3c-db509e749962","error":null,"status":"200"}
+
+REDIRECT_URL: https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=44c8548a-9d7e-4eb3-9b3c-db509e749962
+
+=== 2025-09-18T10:39:06+02:00 ===
+ORDER_ID: 247
+AMOUNT_RAW: '20'
+AMOUNT_CLEAN: 20.0
+PAYLOAD_BEFORE_SEND:
+{
+    "id": "69b27ede-4748-4535-84de-db502acc6510",
+    "currency": "KES",
+    "amount": 20,
+    "description": "Order #247",
+    "callback_url": "https://8e086d3ddab5.ngrok-free.app/Lewvitec/pesapal_callback.php",
+    "notification_id": "69b27ede-4748-4535-84de-db502acc6510",
+    "billing_address": {
+        "email_address": "test@gmail.com",
+        "phone_number": "254700000000",
+        "country_code": "KE",
+        "first_name": "John",
+        "last_name": "Doe",
+        "line_1": "nairobi3333"
+    }
+}
+PESAPAL RESPONSE:
+{"order_tracking_id":"44c8548a-9d7e-4eb3-9b3c-db509e749962","merchant_reference":"69b27ede-4748-4535-84de-db502acc6510","redirect_url":"https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=44c8548a-9d7e-4eb3-9b3c-db509e749962","error":null,"status":"200"}
+
+REDIRECT_URL: https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=44c8548a-9d7e-4eb3-9b3c-db509e749962
+

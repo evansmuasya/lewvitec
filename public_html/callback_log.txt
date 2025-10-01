@@ -1,0 +1,147 @@
+Raw Callback: 
+Raw Callback: 
+❌ Missing OrderTrackingId in callback.
+Raw Callback: 
+❌ Missing OrderTrackingId in callback.
+Raw Callback: 
+❌ Missing OrderTrackingId in callback.
+Raw Callback: 
+❌ Missing OrderTrackingId in callback.
+Raw Callback: 
+❌ Missing OrderTrackingId in callback.
+Raw Callback: 
+❌ Missing OrderTrackingId in callback.
+Raw Callback: 
+❌ Missing OrderTrackingId in callback.
+Incoming: Array
+(
+    [OrderTrackingId] => 5b266ebf-ac73-4efc-a096-db50397b1179
+    [OrderMerchantReference] => ORD_275_1758196005
+)
+
+✅ Status Response: Array
+(
+    [payment_method] => MpesaKE
+    [amount] => 1
+    [created_date] => 2025-09-18T14:47:24.707
+    [confirmation_code] => TII5GK539H
+    [order_tracking_id] => 5b266ebf-ac73-4efc-a096-db50397b1179
+    [payment_status_description] => Completed
+    [description] => 
+    [message] => Request processed successfully
+    [payment_account] => 2547xxx79337
+    [call_back_url] => https://8e086d3ddab5.ngrok-free.app/Lewvitec/pesapal_callback.php?OrderTrackingId=5b266ebf-ac73-4efc-a096-db50397b1179&OrderMerchantReference=ORD_275_1758196005
+    [status_code] => 1
+    [merchant_reference] => ORD_275_1758196005
+    [account_number] => 
+    [payment_status_code] => 
+    [currency] => KES
+    [error] => Array
+        (
+            [error_type] => 
+            [code] => 
+            [message] => 
+        )
+
+    [status] => 200
+)
+
+Incoming: Array
+(
+    [OrderTrackingId] => 5b266ebf-ac73-4efc-a096-db50397b1179
+    [OrderMerchantReference] => ORD_275_1758196005
+)
+
+✅ Status Response: Array
+(
+    [payment_method] => MpesaKE
+    [amount] => 1
+    [created_date] => 2025-09-18T14:47:24.707
+    [confirmation_code] => TII5GK539H
+    [order_tracking_id] => 5b266ebf-ac73-4efc-a096-db50397b1179
+    [payment_status_description] => Completed
+    [description] => 
+    [message] => Request processed successfully
+    [payment_account] => 2547xxx79337
+    [call_back_url] => https://8e086d3ddab5.ngrok-free.app/Lewvitec/pesapal_callback.php?OrderTrackingId=5b266ebf-ac73-4efc-a096-db50397b1179&OrderMerchantReference=ORD_275_1758196005
+    [status_code] => 1
+    [merchant_reference] => ORD_275_1758196005
+    [account_number] => 
+    [payment_status_code] => 
+    [currency] => KES
+    [error] => Array
+        (
+            [error_type] => 
+            [code] => 
+            [message] => 
+        )
+
+    [status] => 200
+)
+
+Incoming: Array
+(
+    [OrderTrackingId] => 5b266ebf-ac73-4efc-a096-db50397b1179
+    [OrderMerchantReference] => ORD_275_1758196005
+)
+
+✅ Status Response: Array
+(
+    [payment_method] => MpesaKE
+    [amount] => 1
+    [created_date] => 2025-09-18T14:47:24.707
+    [confirmation_code] => TII5GK539H
+    [order_tracking_id] => 5b266ebf-ac73-4efc-a096-db50397b1179
+    [payment_status_description] => Completed
+    [description] => 
+    [message] => Request processed successfully
+    [payment_account] => 2547xxx79337
+    [call_back_url] => https://8e086d3ddab5.ngrok-free.app/Lewvitec/pesapal_callback.php?OrderTrackingId=5b266ebf-ac73-4efc-a096-db50397b1179&OrderMerchantReference=ORD_275_1758196005
+    [status_code] => 1
+    [merchant_reference] => ORD_275_1758196005
+    [account_number] => 
+    [payment_status_code] => 
+    [currency] => KES
+    [error] => Array
+        (
+            [error_type] => 
+            [code] => 
+            [message] => 
+        )
+
+    [status] => 200
+)
+
+Incoming: Array
+(
+    [OrderTrackingId] => 5b266ebf-ac73-4efc-a096-db50397b1179
+    [OrderMerchantReference] => ORD_275_1758196005
+)
+
+✅ Status Response: Array
+(
+    [payment_method] => MpesaKE
+    [amount] => 1
+    [created_date] => 2025-09-18T14:47:24.707
+    [confirmation_code] => TII5GK539H
+    [order_tracking_id] => 5b266ebf-ac73-4efc-a096-db50397b1179
+    [payment_status_description] => Completed
+    [description] => 
+    [message] => Request processed successfully
+    [payment_account] => 2547xxx79337
+    [call_back_url] => https://8e086d3ddab5.ngrok-free.app/Lewvitec/pesapal_callback.php?OrderTrackingId=5b266ebf-ac73-4efc-a096-db50397b1179&OrderMerchantReference=ORD_275_1758196005
+    [status_code] => 1
+    [merchant_reference] => ORD_275_1758196005
+    [account_number] => 
+    [payment_status_code] => 
+    [currency] => KES
+    [error] => Array
+        (
+            [error_type] => 
+            [code] => 
+            [message] => 
+        )
+
+    [status] => 200
+)
+
