@@ -59,8 +59,8 @@ if(isset($_POST['submit']))
 }
 
 // Store information for order buttons
-$store_phone = "+254702379337"; // Replace with actual store phone number
-$store_email = "muasyaevans55@gmail.com"; // Replace with actual store email
+$store_phone = "+254712474688"; // Replace with actual store phone number
+$store_email = "roziekithei@gmail.com"; // Replace with actual store email
 ?>
 <!DOCTYPE html>
 <html lang="en">
