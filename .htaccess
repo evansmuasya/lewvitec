@@ -5,27 +5,25 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME}\.php -f
     RewriteRule ^(.*)$ $1.php [L]
-
-    # Handle both 2-segment and 3-segment product URLs
+    
+    # Rewrite slugs to actual PHP files
+    # Rule for category/subcategory/product (3 segments) - PRODUCT DETAILS
     RewriteRule ^products/([^/]+)/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA]
+    
+    # Rule for category/product (2 segments) - FIND SUB CATEGORY FOR PRODUCT
     RewriteRule ^products/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA]
     
-    # Subcategory page with slugs - handle spaces and special characters
-    RewriteRule ^products/([^/]+)/([^/]+)/?$ sub-category.php?category_slug=$1&subcategory_slug=$2 [L,QSA,B]
-
-
+    # Rule for category/subcategory only - CATEGORY PAGE
+    RewriteRule ^categories/([^/]+)/([^/]+)/?$ category.php?category=$1&subcategory=$2 [L,QSA]
     
-    # Category page with slug - handle spaces and special characters
-    RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA,B]
+    # Rule for category only - CATEGORY PAGE
+    RewriteRule ^categories/([^/]+)/?$ category.php?category=$1 [L,QSA]
     
+    # Alternative: If you want to keep /products/ for categories too, use this instead:
+    # Rule for category/subcategory only - CATEGORY PAGE
+    # RewriteRule ^products/([^/]+)/([^/]+)/?$ category.php?category_slug=$1&subcategory_slug=$2 [L,QSA]
     
-    # Redirect double slash or empty slug to categories page
-    RewriteRule ^products//?$ /categories.php [R=301,L]
-    
-    # Alternative direct routes (if needed)
-    RewriteRule ^category/([^/]+)/?$ category.php?category_slug=$1 [L,QSA,B]
-    RewriteRule ^sub-category/([^/]+)/?$ sub-category.php?subcategory_slug=$1 [L,QSA,B]
-    RewriteRule ^product/([^/]+)/?$ product-details.php?product_slug=$1 [L,QSA,B]
-
+    # Rule for category only - CATEGORY PAGE  
+    # RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA]
 </IfModule>
 # php -- END cPanel-generated handler, do not edit
