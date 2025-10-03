@@ -2,7 +2,28 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
-$cid = intval($_GET['cid']);
+
+// ================= SLUG-BASED CATEGORY LOADING =================
+$category_slug = $_GET['category_slug'] ?? '';
+
+if(empty($category_slug)) {
+    // If no slug provided, redirect to categories page
+    header('Location: categories.php');
+    exit();
+}
+
+// Get category ID from slug
+$cat_query = mysqli_query($con, "SELECT id, categoryName FROM category WHERE slug = '$category_slug'");
+if(mysqli_num_rows($cat_query) == 0) {
+    // Category not found - show 404
+    header("HTTP/1.0 404 Not Found");
+    include '404.php';
+    exit();
+}
+
+$cat_row = mysqli_fetch_array($cat_query);
+$cid = $cat_row['id'];
+$category_name = $cat_row['categoryName'];
 
 // ================= ADD TO CART =================
 if (isset($_GET['action']) && $_GET['action'] == "add") {
@@ -24,7 +45,9 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
     // Store message in session to display after redirect
     if (isset($message)) $_SESSION['message'] = $message;
     if (isset($error)) $_SESSION['error'] = $error;
-    echo "<script type='text/javascript'> document.location ='my-cart.php'; </script>";
+    
+    // Redirect back to category page with slug
+    echo "<script type='text/javascript'> document.location ='products/".$category_slug."/'; </script>";
     exit();
 }
 
@@ -46,16 +69,6 @@ if (isset($_GET['pid']) && $_GET['action'] == "wishlist") {
         exit();
     }
 }
-
-// Get category name for better page title
-$category_name = "";
-if($cid > 0) {
-    $cat_query = mysqli_query($con, "SELECT categoryName FROM category WHERE id='$cid'");
-    if(mysqli_num_rows($cat_query) > 0) {
-        $cat_row = mysqli_fetch_array($cat_query);
-        $category_name = $cat_row['categoryName'];
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -72,13 +85,13 @@ if($cid > 0) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <style>
-  .container {
-  width: 100%;
-  padding-right: 0;
-  padding-left: 0;
-  margin-right: auto;
-  margin-left: auto;
-       }
+        .container {
+            width: 100%;
+            padding-right: 0;
+            padding-left: 0;
+            margin-right: auto;
+            margin-left: auto;
+        }
 
         :root {
             --primary-color: #4e73df;
@@ -408,10 +421,15 @@ if($cid > 0) {
                         if ($num > 0) {
                             echo '<div class="product-grid">';
                             while ($row = mysqli_fetch_array($ret)) {
+                                // Get product slug for clean URLs
+                                $product_slug = $row['p_slug'] ?? '';
+                                $product_url = !empty($product_slug) ? 
+                                    "products/{$category_slug}/{$product_slug}/" : 
+                                    "product-details.php?pid=" . htmlentities($row['id']);
                                 ?>
                                 <div class="product-card">
                                     <div class="product-image">
-                                        <a href="product-details.php?pid=<?php echo htmlentities($row['id']);?>">
+                                        <a href="<?php echo $product_url; ?>">
                                             <img src="admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage1']);?>" 
                                                  alt="<?php echo htmlentities($row['productName']);?>">
                                         </a>
@@ -422,7 +440,7 @@ if($cid > 0) {
 
                                     <div class="product-info">
                                         <h3 class="product-name">
-                                            <a href="product-details.php?pid=<?php echo htmlentities($row['id']);?>">
+                                            <a href="<?php echo $product_url; ?>">
                                                 <?php echo htmlentities($row['productName']);?>
                                             </a>
                                         </h3>
@@ -435,19 +453,16 @@ if($cid > 0) {
                                         </div>
                                         
                                         <div class="product-actions">
-    <?php if ($row['stockQuantity'] > 0) { ?>
-        <a href="category.php?cid=<?php echo $cid; ?>&action=add&id=<?php echo $row['id']; ?>" class="btn-add-cart add-to-cart">
-            <i class="fas fa-shopping-cart"></i> Add to cart
-        </a>
-    <?php } else { ?>
-       
-    <?php } ?>
-    
-    <a class="btn-wishlist add-to-wishlist" href="category.php?cid=<?php echo $cid; ?>&pid=<?php echo htmlentities($row['id'])?>&action=wishlist" title="Add to Wishlist">
-        <i class="fa fa-heart"></i>
-    </a>
-</div>
-
+                                            <?php if ($row['stockQuantity'] > 0) { ?>
+                                                <a href="products/<?php echo $category_slug; ?>/?action=add&id=<?php echo $row['id']; ?>" class="btn-add-cart add-to-cart">
+                                                    <i class="fas fa-shopping-cart"></i> Add to cart
+                                                </a>
+                                            <?php } ?>
+                                            
+                                            <a class="btn-wishlist add-to-wishlist" href="products/<?php echo $category_slug; ?>/?pid=<?php echo htmlentities($row['id'])?>&action=wishlist" title="Add to Wishlist">
+                                                <i class="fa fa-heart"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             <?php }
@@ -468,7 +483,7 @@ if($cid > 0) {
                         <ul class="pagination">
                             <?php if ($page > 1): ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="?cid=<?php echo $cid; ?>&page=<?php echo $page - 1; ?>" aria-label="Previous">
+                                    <a class="page-link" href="products/<?php echo $category_slug; ?>/?page=<?php echo $page - 1; ?>" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
@@ -485,13 +500,13 @@ if($cid > 0) {
                             
                             for ($i = $startPage; $i <= $endPage; $i++): ?>
                                 <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
-                                    <a class="page-link" href="?cid=<?php echo $cid; ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                    <a class="page-link" href="products/<?php echo $category_slug; ?>/?page=<?php echo $i; ?>"><?php echo $i; ?></a>
                                 </li>
                             <?php endfor; ?>
 
                             <?php if ($page < $pages): ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="?cid=<?php echo $cid; ?>&page=<?php echo $page + 1; ?>" aria-label="Next">
+                                    <a class="page-link" href="products/<?php echo $category_slug; ?>/?page=<?php echo $page + 1; ?>" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
