@@ -429,12 +429,23 @@ if (isset($_GET['pid']) && $_GET['action'] == "wishlist") {
                         if ($num > 0) {
                             echo '<div class="product-grid">';
                             while ($row = mysqli_fetch_array($ret)) {
-                                // Get product slug for clean URLs
-                                $product_slug = $row['p_slug'] ?? '';
-                                $product_url = !empty($product_slug) ? 
-                                  "/products/{$category_slug}/{$product_slug}/" : 
-                                  "/product-details.php?pid=" . htmlentities($row['id']);
-                                ?>
+                               <?php
+// Get product slug and subcategory slug for clean URLs
+$product_slug = $row['p_slug'] ?? '';
+
+// Get the subcategory slug for this specific product
+$subcat_query = mysqli_query($con, "SELECT s.s_slug FROM subcategory s WHERE s.id = '".$row['subCategory']."'");
+$subcat_data = mysqli_fetch_array($subcat_query);
+$subcategory_slug = $subcat_data['s_slug'] ?? '';
+
+// Generate proper 3-segment URL: /products/category/subcategory/product/
+if (!empty($product_slug) && !empty($subcategory_slug)) {
+    $product_url = "/products/{$category_slug}/{$subcategory_slug}/{$product_slug}/";
+} else {
+    // Fallback to old URL if slugs are missing
+    $product_url = "/product-details.php?pid=" . htmlentities($row['id']);
+}
+?>
                                 <div class="product-card">
                                     <div class="product-image">
                                         <a href="<?php echo $product_url; ?>">
