@@ -1,31 +1,23 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # ------------------------------------------------------------
-    # 1. Remove .php extension
-    # ------------------------------------------------------------
+    # Remove .php extension
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME}\.php -f
     RewriteRule ^(.*)$ $1.php [L]
-
-    # ------------------------------------------------------------
-    # 2. Product URLs (category / subcategory / product)
-    # Example: /products/microphones/wired-microphones/akg-d7-wired-microphone/
-    # ------------------------------------------------------------
+    
+    # Rewrite slugs to actual PHP files
+    
+    # 1. First handle 3-segment product URLs
     RewriteRule ^products/([^/]+)/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA]
-
-    # ------------------------------------------------------------
-    # 3. Subcategory pages (category / subcategory)
-    # Example: /products/speakers/mid-range-speakers/
-    # ------------------------------------------------------------
+    
+    # 2. Then handle 2-segment category/subcategory URLs  
     RewriteRule ^products/([^/]+)/([^/]+)/?$ category.php?category_slug=$1&subcategory_slug=$2 [L,QSA]
-
-    # ------------------------------------------------------------
-    # 4. Category pages (category only)
-    # Example: /products/microphones/
-    # ------------------------------------------------------------
+    
+    # 3. Then handle 2-segment product URLs (missing subcategory)
+    RewriteRule ^product/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA]
+    
+    # 4. Finally handle 1-segment category URLs
     RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA]
 </IfModule>
-
-
 # php -- END cPanel-generated handler, do not edit
