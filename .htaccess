@@ -14,6 +14,10 @@
     
     # Category page with slug - handle spaces and special characters
     RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA,B]
+
+    # Catch product links without subcategory
+    RewriteRule ^products/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA,B]
+
     
     # Redirect double slash or empty slug to categories page
     RewriteRule ^products//?$ /categories.php [R=301,L]
