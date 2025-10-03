@@ -5,19 +5,20 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME}\.php -f
     RewriteRule ^(.*)$ $1.php [L]
-    
-    # Rewrite slugs to actual PHP files
-    
-    # 1. First handle 3-segment product URLs
+
+    # --- Rewrite slugs to actual PHP files ---
+
+    # 1. Product details page with category + subcategory + product
     RewriteRule ^products/([^/]+)/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA]
-    
-    # 2. Then handle 2-segment category/subcategory URLs  
-    RewriteRule ^products/([^/]+)/([^/]+)/?$ category.php?category_slug=$1&subcategory_slug=$2 [L,QSA]
-    
-    # 3. Then handle 2-segment product URLs (missing subcategory)
+
+    # 2. Product details page with category + product (missing subcategory)
     RewriteRule ^products/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA]
-    
-    # 4. Finally handle 1-segment category URLs
+
+    # 3. Category + subcategory page
+    RewriteRule ^products/([^/]+)/([^/]+)/?$ category.php?category_slug=$1&subcategory_slug=$2 [L,QSA]
+
+    # 4. Category only page
     RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA]
 </IfModule>
+
 # php -- END cPanel-generated handler, do not edit
