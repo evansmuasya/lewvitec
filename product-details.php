@@ -42,26 +42,6 @@ if(empty($category_slug) || empty($subcategory_slug) || empty($product_slug)) {
     $pid = $product_row['id'];
 }
 
-if ($product_slug && !$subcategory_slug) {
-    // Find the correct subcategory from DB
-    $stmt = $pdo->prepare("
-        SELECT subcategory_slug 
-        FROM products 
-        WHERE category_slug = ? AND product_slug = ?
-        LIMIT 1
-    ");
-    $stmt->execute([$category_slug, $product_slug]);
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($row) {
-        $subcategory_slug = $row['subcategory_slug'];
-
-        // Redirect to the full correct URL
-        $correct_url = "/products/$category_slug/$subcategory_slug/$product_slug/";
-        header("Location: $correct_url", true, 301);
-        exit;
-    }
-}
 
 if(isset($_GET['action']) && $_GET['action']=="add"){
     $id=intval($_GET['id']);
