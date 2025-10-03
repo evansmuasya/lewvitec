@@ -6,9 +6,9 @@ include('includes/config.php');
 // ================= SLUG-BASED CATEGORY LOADING =================
 $category_slug = $_GET['category_slug'] ?? '';
 
-if(empty($category_slug)) {
-    // If no slug provided, redirect to categories page
-    header('Location: categories.php');
+// Validate slug - redirect if empty or invalid
+if(empty($category_slug) || $category_slug == '') {
+    header('Location: /categories.php');
     exit();
 }
 
@@ -386,7 +386,7 @@ if (isset($_GET['pid']) && $_GET['action'] == "wishlist") {
         <!-- Breadcrumb -->
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                <li class="breadcrumb-item"><a href="lewvitec.co.ke">Home</a></li>
                 <li class="breadcrumb-item"><a href="categories.php">Categories</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
                     <?php echo $category_name ? htmlspecialchars($category_name) : 'Products'; ?>
