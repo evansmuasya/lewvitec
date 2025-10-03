@@ -15,7 +15,7 @@
     RewriteRule ^products/([^/]+)/([^/]+)/?$ category.php?category_slug=$1&subcategory_slug=$2 [L,QSA]
     
     # 3. Then handle 2-segment product URLs (missing subcategory)
-    RewriteRule ^product/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA]
+    RewriteRule ^products/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA]
     
     # 4. Finally handle 1-segment category URLs
     RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA]
