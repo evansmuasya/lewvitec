@@ -6,17 +6,21 @@
     RewriteCond %{REQUEST_FILENAME}\.php -f
     RewriteRule ^(.*)$ $1.php [L]
     
-    # Product details page with slugs - very permissive
-    RewriteRule ^products/(.+)/(.+)/(.+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA,B]
+    # Product details page with slugs - handle spaces and special characters
+    RewriteRule ^products/([^/]+)/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA,B]
     
-    # Subcategory page with slugs - very permissive
-    RewriteRule ^products/(.+)/(.+)/?$ sub-category.php?category_slug=$1&subcategory_slug=$2 [L,QSA,B]
+    # Subcategory page with slugs - handle spaces and special characters
+    RewriteRule ^products/([^/]+)/([^/]+)/?$ sub-category.php?category_slug=$1&subcategory_slug=$2 [L,QSA,B]
     
-    # Category page with slug - very permissive
-    RewriteRule ^products/(.+)/?$ category.php?category_slug=$1 [L,QSA,B]
+    # Category page with slug - handle spaces and special characters
+    RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA,B]
     
     # Redirect double slash or empty slug to categories page
     RewriteRule ^products//?$ /categories.php [R=301,L]
+    
+    # Alternative direct routes (if needed)
+    RewriteRule ^category/([^/]+)/?$ category.php?category_slug=$1 [L,QSA,B]
+    RewriteRule ^sub-category/([^/]+)/?$ sub-category.php?subcategory_slug=$1 [L,QSA,B]
+    RewriteRule ^product/([^/]+)/?$ product-details.php?product_slug=$1 [L,QSA,B]
 </IfModule>
-
 # php -- END cPanel-generated handler, do not edit
