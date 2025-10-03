@@ -632,22 +632,32 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
         while ($category = mysqli_fetch_array($categories)) {
             $cat_id = $category['id'];
             $cat_name = $category['categoryName'];
+            $cat_slug = $category['slug'];
         ?>
         <div class="category-products-section">
             <div class="category-header">
                 <h2 class="category-title"><?php echo htmlentities($cat_name); ?></h2>
-                <a href="category.php?cid=<?php echo $cat_id; ?>" class="view-all-category">View More <i class="fas fa-arrow-right"></i></a>
+                <a href="/products/<?php echo $cat_slug; ?>/" class="view-all-category">View More <i class="fas fa-arrow-right"></i></a>
             </div>
             
             <div class="products-grid">
                 <?php
-                $products = mysqli_query($con, "SELECT * FROM products WHERE category = $cat_id LIMIT 12");
+                $products = mysqli_query($con, "SELECT p.*, c.slug as cat_slug, s.s_slug as subcat_slug 
+                                              FROM products p 
+                                              JOIN category c ON p.category = c.id 
+                                              JOIN subcategory s ON p.subCategory = s.id 
+                                              WHERE p.category = $cat_id 
+                                              LIMIT 12");
                 while ($row = mysqli_fetch_array($products)) {
+                    // Generate proper product URL with slugs
+                    $product_url = !empty($row['p_slug']) 
+                        ? "/products/{$row['cat_slug']}/{$row['subcat_slug']}/{$row['p_slug']}/" 
+                        : "/product-details.php?pid=" . htmlentities($row['id']);
                 ?>
                 
                 <div class="product-card">
                     <div class="product-image">
-                        <a href="product-details.php?pid=<?php echo htmlentities($row['id']); ?>" class="product-image-link">
+                        <a href="<?php echo $product_url; ?>" class="product-image-link">
                             <img src="admin/productimages/<?php echo htmlentities($row['id']); ?>/<?php echo htmlentities($row['productImage1']); ?>" 
                                  alt="<?php echo htmlentities($row['productName']); ?>"
                                  loading="lazy"
@@ -671,7 +681,7 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
 
                     <div class="product-info">
                         <h3 class="product-name">
-                            <a href="product-details.php?pid=<?php echo htmlentities($row['id']); ?>">
+                            <a href="<?php echo $product_url; ?>">
                                 <?php echo htmlentities($row['productName']); ?>
                             </a>
                         </h3>
@@ -693,7 +703,7 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
 
                         <div class="product-actions">
                             <?php if($row['productAvailability'] == 'In Stock'): ?>
-                            <a href="index.php?page=product&action=add&id=<?php echo $row['id']; ?>" 
+                            <a href="/index.php?action=add&id=<?php echo $row['id']; ?>" 
                                class="add-to-cart-btn">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="9" cy="21" r="1"></circle>
