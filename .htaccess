@@ -1,23 +1,29 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    
-    # Remove .php extension
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME}\.php -f
-    RewriteRule ^(.*)$ $1.php [L]
-    
-    # Rewrite slugs to actual PHP files
-    
-    # 1. First handle 3-segment product URLs
-    RewriteRule ^products/([^/]+)/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA]
-    
-    # 2. Then handle 2-segment category/subcategory URLs  
-    RewriteRule ^products/([^/]+)/([^/]+)/?$ category.php?category_slug=$1&subcategory_slug=$2 [L,QSA]
-    
-    # 3. Then handle 2-segment product URLs (missing subcategory)
-    RewriteRule ^product/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA]
-    
-    # 4. Finally handle 1-segment category URLs
-    RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA]
-</IfModule>
+<script>
+$(document).ready(function() {
+    // Fix product links to use 3-segment format
+    $('a[href*="/products/"]').each(function() {
+        var href = $(this).attr('href');
+        var currentPath = window.location.pathname;
+        
+        // Check if this is a 2-segment product link
+        if (href.match(/\/products\/[^\/]+\/[^\/]+\/$/) && !href.match(/\/products\/[^\/]+\/[^\/]+\/[^\/]+\/$/)) {
+            // Extract category and product slug from href
+            var matches = href.match(/\/products\/([^\/]+)\/([^\/]+)\/$/);
+            if (matches) {
+                var categorySlug = matches[1];
+                var productSlug = matches[2];
+                
+                // Get current subcategory from URL
+                var currentMatches = currentPath.match(/\/products\/([^\/]+)\/([^\/]+)\/$/);
+                if (currentMatches && currentMatches[2] !== productSlug) {
+                    var subcategorySlug = currentMatches[2];
+                    // Create proper 3-segment URL
+                    var newHref = '/products/' + categorySlug + '/' + subcategorySlug + '/' + productSlug + '/';
+                    $(this).attr('href', newHref);
+                }
+            }
+        }
+    });
+});
+</script>
 # php -- END cPanel-generated handler, do not edit
