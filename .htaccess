@@ -9,7 +9,6 @@
     # Product details page with slugs
     RewriteRule ^products/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA]
     
-    
     # Subcategory page with slugs
     RewriteRule ^products/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/?$ sub-category.php?category_slug=$1&subcategory_slug=$2 [L,QSA]
     
