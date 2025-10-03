@@ -42,7 +42,6 @@ if(empty($category_slug) || empty($subcategory_slug) || empty($product_slug)) {
     $pid = $product_row['id'];
 }
 
-
 if(isset($_GET['action']) && $_GET['action']=="add"){
     $id=intval($_GET['id']);
     if(isset($_SESSION['cart'][$id])){
