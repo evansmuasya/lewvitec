@@ -10,10 +10,10 @@
     RewriteRule ^products/([^/]+)/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA]
     
     # Subcategory page with slugs
-    RewriteRule ^products/([^/]+)/([^/]+)/?$ sub-category.php?category_slug=$1&subcategory_slug=$2 [L,QSA]
+    RewriteRule ^sub-category/([^/]+)/?$ sub-category.php?subcategory_slug=$1 [L,QSA]
     
     # Category page with slug
-    RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA]
+    RewriteRule ^category/([^/]+)/?$ category.php?category_slug=$1 [L,QSA]
     
     # Alternative direct routes (if needed)
     RewriteRule ^category/([^/]+)/?$ category.php?category_slug=$1 [L,QSA]
