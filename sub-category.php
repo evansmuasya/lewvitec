@@ -2,7 +2,41 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
-$scid = intval($_GET['scid']); // Subcategory ID
+
+// ================= SLUG-BASED SUBCATEGORY LOADING =================
+$category_slug = $_GET['category_slug'] ?? '';
+$subcategory_slug = $_GET['subcategory_slug'] ?? '';
+
+// Validate slugs - redirect if empty or invalid
+if(empty($category_slug) || empty($subcategory_slug)) {
+    header('Location: /categories.php');
+    exit();
+}
+
+// Get subcategory and category info using slugs
+$subcategory_name = "";
+$category_id = "";
+$category_name = "";
+$scid = "";
+
+$subcat_query = mysqli_query($con, "SELECT s.*, c.id as cat_id, c.categoryName as cat_name, c.slug as cat_slug 
+                                  FROM subcategory s 
+                                  JOIN category c ON s.categoryid = c.id 
+                                  WHERE c.slug = '$category_slug' AND s.s_slug = '$subcategory_slug'");
+
+if(mysqli_num_rows($subcat_query) == 0) {
+    // Subcategory not found - show 404
+    header("HTTP/1.0 404 Not Found");
+    include '404.php';
+    exit();
+}
+
+$subcat_row = mysqli_fetch_array($subcat_query);
+$scid = $subcat_row['id'];
+$subcategory_name = $subcat_row['subcategory'];
+$category_id = $subcat_row['cat_id'];
+$category_name = $subcat_row['cat_name'];
+$category_slug = $subcat_row['cat_slug']; // Use the slug from database for consistency
 
 // ================= ADD TO CART =================
 if (isset($_GET['action']) && $_GET['action'] == "add") {
@@ -24,14 +58,16 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
     // Store message in session to display after redirect
     if (isset($message)) $_SESSION['message'] = $message;
     if (isset($error)) $_SESSION['error'] = $error;
-    echo "<script type='text/javascript'> document.location ='my-cart.php'; </script>";
+    
+    // Redirect back to subcategory page with slugs
+    echo "<script type='text/javascript'> document.location ='/products/".$category_slug."/".$subcategory_slug."/'; </script>";
     exit();
 }
 
 // ================= ADD TO WISHLIST =================
 if (isset($_GET['pid']) && $_GET['action'] == "wishlist") {
     if (strlen($_SESSION['login']) == 0) {
-        header('location:login.php');
+        header('location:/login.php');
         exit();
     } else {
         // Check if product is already in wishlist
@@ -42,27 +78,8 @@ if (isset($_GET['pid']) && $_GET['action'] == "wishlist") {
         } else {
             $_SESSION['message'] = "Product is already in your wishlist";
         }
-        header('location:my-wishlist.php');
+        header('location:/my-wishlist.php');
         exit();
-    }
-}
-
-// Get subcategory and category info for better page structure
-$subcategory_name = "";
-$category_id = "";
-$category_name = "";
-
-if($scid > 0) {
-    $subcat_query = mysqli_query($con, "SELECT s.*, c.id as cat_id, c.categoryName as cat_name 
-                                      FROM subcategory s 
-                                      JOIN category c ON s.categoryid = c.id 
-                                      WHERE s.id='$scid'");
-    
-    if(mysqli_num_rows($subcat_query) > 0) {
-        $subcat_row = mysqli_fetch_array($subcat_query);
-        $subcategory_name = $subcat_row['subcategory'];
-        $category_id = $subcat_row['cat_id'];
-        $category_name = $subcat_row['cat_name'];
     }
 }
 ?>
@@ -70,28 +87,25 @@ if($scid > 0) {
 <html lang="en">
 <head>
     <!-- Meta -->
+    <base href="/">
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title><?php echo $subcategory_name ? htmlspecialchars($subcategory_name) . ' - ' : ''; ?>Product Subcategory</title>
 
     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
-
-	
     <style>
-
-.container {
-  width: 100%;
-  padding-right: 0;
-  padding-left: 0;
-  margin-right: auto;
-  margin-left: auto;
-}
-
+        .container {
+            width: 100%;
+            padding-right: 0;
+            padding-left: 0;
+            margin-right: auto;
+            margin-left: auto;
+        }
 
         :root {
             --primary-color: #4e73df;
@@ -119,14 +133,69 @@ if($scid > 0) {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 20px;
-			padding
+            padding: 0 20px;
             margin-bottom: 30px;
         }
         
+        /* Mobile-specific styles */
         @media (max-width: 768px) {
             .product-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                gap: 15px;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px;
+                padding: 0 10px;
+            }
+            
+            .product-card {
+                border-radius: 8px;
+            }
+            
+            .product-image {
+                height: 140px;
+            }
+            
+            .product-info {
+                padding: 10px;
+            }
+            
+            .product-name {
+                font-size: 0.85rem;
+                height: 2.6em;
+            }
+            
+            .current-price {
+                font-size: 0.95rem;
+            }
+            
+            .original-price {
+                font-size: 0.8rem;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+                gap: 8px;
+                margin-top: 10px;
+            }
+            
+            .btn-add-cart, .btn-wishlist {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+            
+            .btn-add-cart {
+                padding: 5px 8px;
+                font-size: 0.8rem;
+            }
+            
+            .btn-wishlist {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Tablet and larger screens */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             }
         }
         
@@ -237,6 +306,9 @@ if($scid > 0) {
             border-radius: 4px;
             font-size: 0.85rem;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         .btn-add-cart:hover {
@@ -250,6 +322,9 @@ if($scid > 0) {
             border: none;
             font-size: 1.1rem;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .btn-wishlist:hover {
@@ -325,10 +400,10 @@ if($scid > 0) {
         <!-- Breadcrumb -->
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                <li class="breadcrumb-item"><a href="categories.php">Categories</a></li>
+                <li class="breadcrumb-item"><a href="/index.php">Home</a></li>
+                <li class="breadcrumb-item"><a href="/categories.php">Categories</a></li>
                 <?php if ($category_id): ?>
-                <li class="breadcrumb-item"><a href="category.php?cid=<?php echo $category_id; ?>"><?php echo htmlspecialchars($category_name); ?></a></li>
+                <li class="breadcrumb-item"><a href="/products/<?php echo $category_slug; ?>/"><?php echo htmlspecialchars($category_name); ?></a></li>
                 <?php endif; ?>
                 <li class="breadcrumb-item active" aria-current="page">
                     <?php echo $subcategory_name ? htmlspecialchars($subcategory_name) : 'Products'; ?>
@@ -338,7 +413,6 @@ if($scid > 0) {
         
         <div class="subcategory-header">
             <h2><?php echo $subcategory_name ? htmlspecialchars($subcategory_name) : 'Subcategory Products'; ?></h2>
-         
         </div>
         
         <div class='row outer-bottom-sm'>
@@ -363,11 +437,16 @@ if($scid > 0) {
                         if ($num > 0) {
                             echo '<div class="product-grid">';
                             while ($row = mysqli_fetch_array($ret)) {
+                                // Get product slug for clean URLs
+                                $product_slug = $row['p_slug'] ?? '';
+                                $product_url = !empty($product_slug) ? 
+                                    "/products/{$category_slug}/{$subcategory_slug}/{$product_slug}/" : 
+                                    "/product-details.php?pid=" . htmlentities($row['id']);
                                 ?>
                                 <div class="product-card">
                                     <div class="product-image">
-                                        <a href="product-details.php?pid=<?php echo htmlentities($row['id']);?>">
-                                            <img src="admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage1']);?>" 
+                                        <a href="<?php echo $product_url; ?>">
+                                            <img src="/admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage1']);?>" 
                                                  alt="<?php echo htmlentities($row['productName']);?>">
                                         </a>
                                         <div class="product-badge <?php echo $row['productAvailability'] != 'In Stock' ? 'out-of-stock' : ''; ?>">
@@ -377,7 +456,7 @@ if($scid > 0) {
 
                                     <div class="product-info">
                                         <h3 class="product-name">
-                                            <a href="product-details.php?pid=<?php echo htmlentities($row['id']);?>">
+                                            <a href="<?php echo $product_url; ?>">
                                                 <?php echo htmlentities($row['productName']);?>
                                             </a>
                                         </h3>
@@ -390,19 +469,16 @@ if($scid > 0) {
                                         </div>
                                         
                                         <div class="product-actions">
-    <?php if ($row['stockQuantity'] > 0) { ?>
-        <a href="sub-category.php?cid=<?php echo $scid; ?>&action=add&id=<?php echo $row['id']; ?>" class="btn-add-cart add-to-cart">
-            <i class="fas fa-shopping-cart"></i> Add to Cart
-        </a>
-    <?php } else { ?>
-     
-    <?php } ?>
-    
-    <a class="btn-wishlist add-to-wishlist" href="category.php?cid=<?php echo $cid; ?>&pid=<?php echo htmlentities($row['id'])?>&action=wishlist" title="Add to Wishlist">
-        <i class="fa fa-heart"></i>
-    </a>
-</div>
-
+                                            <?php if ($row['stockQuantity'] > 0) { ?>
+                                                <a href="/products/<?php echo $category_slug; ?>/<?php echo $subcategory_slug; ?>/?action=add&id=<?php echo $row['id']; ?>" class="btn-add-cart add-to-cart">
+                                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                                </a>
+                                            <?php } ?>
+                                            
+                                            <a class="btn-wishlist add-to-wishlist" href="/products/<?php echo $category_slug; ?>/<?php echo $subcategory_slug; ?>/?pid=<?php echo htmlentities($row['id'])?>&action=wishlist" title="Add to Wishlist">
+                                                <i class="fa fa-heart"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             <?php }
@@ -412,7 +488,7 @@ if($scid > 0) {
                                 <i class="fas fa-box-open"></i>
                                 <h3>No Products Found</h3>
                                 <p>We couldn't find any products in this subcategory.</p>
-                                <a href="index.php" class="btn btn-primary mt-3">Browse Other Categories</a>
+                                <a href="/index.php" class="btn btn-primary mt-3">Browse Other Categories</a>
                             </div>
                         <?php } ?>
                     </div><!-- /.category-product -->
@@ -423,7 +499,7 @@ if($scid > 0) {
                         <ul class="pagination">
                             <?php if ($page > 1): ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="?scid=<?php echo $scid; ?>&page=<?php echo $page - 1; ?>" aria-label="Previous">
+                                    <a class="page-link" href="/products/<?php echo $category_slug; ?>/<?php echo $subcategory_slug; ?>/?page=<?php echo $page - 1; ?>" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
@@ -440,13 +516,13 @@ if($scid > 0) {
                             
                             for ($i = $startPage; $i <= $endPage; $i++): ?>
                                 <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
-                                    <a class="page-link" href="?scid=<?php echo $scid; ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                    <a class="page-link" href="/products/<?php echo $category_slug; ?>/<?php echo $subcategory_slug; ?>/?page=<?php echo $i; ?>"><?php echo $i; ?></a>
                                 </li>
                             <?php endfor; ?>
 
                             <?php if ($page < $pages): ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="?scid=<?php echo $scid; ?>&page=<?php echo $page + 1; ?>" aria-label="Next">
+                                    <a class="page-link" href="/products/<?php echo $category_slug; ?>/<?php echo $subcategory_slug; ?>/?page=<?php echo $page + 1; ?>" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
@@ -470,8 +546,8 @@ if($scid > 0) {
 </div>
 
 <!-- JS -->
-<script src="assets/js/jquery-1.11.1.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
 $(document).ready(function() {
