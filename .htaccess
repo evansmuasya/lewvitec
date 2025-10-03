@@ -1,23 +1,36 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # Remove .php extension
+    # ------------------------------------------------------------
+    # 1. Remove .php extension
+    # ------------------------------------------------------------
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME}\.php -f
     RewriteRule ^(.*)$ $1.php [L]
 
-    # --- Rewrite slugs to actual PHP files ---
-
-    # 1. Product details page with category + subcategory + product
+    # ------------------------------------------------------------
+    # 2. Product URLs (3 segments: category / subcategory / product)
+    # Example: /products/microphones/wired-microphones/akg-d7-wired-microphone/
+    # ------------------------------------------------------------
     RewriteRule ^products/([^/]+)/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA]
 
-    # 2. Product details page with category + product (missing subcategory)
-    RewriteRule ^products/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA]
-
-    # 3. Category + subcategory page
+    # ------------------------------------------------------------
+    # 3. Subcategory pages (2 segments: category / subcategory)
+    # Example: /products/speakers/mid-range-speakers/
+    # ------------------------------------------------------------
     RewriteRule ^products/([^/]+)/([^/]+)/?$ category.php?category_slug=$1&subcategory_slug=$2 [L,QSA]
 
-    # 4. Category only page
+    # ------------------------------------------------------------
+    # 4. Product URLs (short form: category / product) 
+    # Example: /products/microphones/akg-d7-wired-microphone/
+    # NOTE: This comes *after* subcategory rule so it won’t hijack.
+    # ------------------------------------------------------------
+    RewriteRule ^products/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA]
+
+    # ------------------------------------------------------------
+    # 5. Category pages (1 segment: category only)
+    # Example: /products/microphones/
+    # ------------------------------------------------------------
     RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA]
 </IfModule>
 
