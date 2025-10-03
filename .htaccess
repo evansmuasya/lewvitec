@@ -6,8 +6,9 @@
     RewriteCond %{REQUEST_FILENAME}\.php -f
     RewriteRule ^(.*)$ $1.php [L]
 
-    # Product details page with slugs - handle spaces and special characters
-    RewriteRule ^products/([^/]+)/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA,B]
+    # Handle both 2-segment and 3-segment product URLs
+    RewriteRule ^products/([^/]+)/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA]
+    RewriteRule ^products/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA]
     
     # Subcategory page with slugs - handle spaces and special characters
     RewriteRule ^products/([^/]+)/([^/]+)/?$ sub-category.php?category_slug=$1&subcategory_slug=$2 [L,QSA,B]

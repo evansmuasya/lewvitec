@@ -8,8 +8,31 @@ $category_slug = $_GET['category_slug'] ?? '';
 $subcategory_slug = $_GET['subcategory_slug'] ?? '';
 $product_slug = $_GET['product_slug'] ?? '';
 
+// Check if this is a 2-segment URL (category/product)
+if(empty($subcategory_slug) && !empty($category_slug) && !empty($product_slug)) {
+    // This is a 2-segment URL, find the subcategory
+    $category_slug = urldecode($category_slug);
+    $product_slug = urldecode($product_slug);
+    
+    $find_subcategory_query = mysqli_query($con, "SELECT s.s_slug as subcat_slug 
+                                               FROM products p 
+                                               JOIN subcategory s ON p.subCategory = s.id 
+                                               JOIN category c ON p.category = c.id 
+                                               WHERE c.slug = '$category_slug' 
+                                               AND p.p_slug = '$product_slug'");
+    
+    if(mysqli_num_rows($find_subcategory_query) > 0) {
+        $subcat_row = mysqli_fetch_array($find_subcategory_query);
+        $subcategory_slug = $subcat_row['subcat_slug'];
+        
+        // Redirect to proper 3-segment URL
+        header("Location: /products/{$category_slug}/{$subcategory_slug}/{$product_slug}/", true, 301);
+        exit();
+    }
+}
+
 // Validate slugs - redirect if empty or invalid
-if(empty($category_slug) || empty($subcategory_slug) || empty($product_slug)) {
+if(empty($category_slug) || empty($product_slug)) {
     // Fallback to old PID system if slugs not available
     $pid = intval($_GET['pid'] ?? 0);
     if($pid == 0) {
@@ -21,6 +44,9 @@ if(empty($category_slug) || empty($subcategory_slug) || empty($product_slug)) {
     $category_slug = urldecode($category_slug);
     $subcategory_slug = urldecode($subcategory_slug);
     $product_slug = urldecode($product_slug);
+    
+    // Rest of your existing code...
+}
     
     // Get product ID from slugs
     $product_query = mysqli_query($con, "SELECT p.id 
@@ -40,7 +66,7 @@ if(empty($category_slug) || empty($subcategory_slug) || empty($product_slug)) {
     
     $product_row = mysqli_fetch_array($product_query);
     $pid = $product_row['id'];
-}
+
 
 if(isset($_GET['action']) && $_GET['action']=="add"){
     $id=intval($_GET['id']);
