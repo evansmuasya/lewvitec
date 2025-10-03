@@ -2,6 +2,46 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
+
+// ================= SLUG-BASED PRODUCT LOADING =================
+$category_slug = $_GET['category_slug'] ?? '';
+$subcategory_slug = $_GET['subcategory_slug'] ?? '';
+$product_slug = $_GET['product_slug'] ?? '';
+
+// Validate slugs - redirect if empty or invalid
+if(empty($category_slug) || empty($subcategory_slug) || empty($product_slug)) {
+    // Fallback to old PID system if slugs not available
+    $pid = intval($_GET['pid'] ?? 0);
+    if($pid == 0) {
+        header('Location: /categories.php');
+        exit();
+    }
+} else {
+    // URL decode the slugs to handle spaces and special characters
+    $category_slug = urldecode($category_slug);
+    $subcategory_slug = urldecode($subcategory_slug);
+    $product_slug = urldecode($product_slug);
+    
+    // Get product ID from slugs
+    $product_query = mysqli_query($con, "SELECT p.id 
+                                       FROM products p 
+                                       JOIN subcategory s ON p.subCategory = s.id 
+                                       JOIN category c ON p.category = c.id 
+                                       WHERE c.slug = '$category_slug' 
+                                       AND s.s_slug = '$subcategory_slug' 
+                                       AND p.p_slug = '$product_slug'");
+    
+    if(mysqli_num_rows($product_query) == 0) {
+        // Product not found - show 404
+        header("HTTP/1.0 404 Not Found");
+        include '404.php';
+        exit();
+    }
+    
+    $product_row = mysqli_fetch_array($product_query);
+    $pid = $product_row['id'];
+}
+
 if(isset($_GET['action']) && $_GET['action']=="add"){
     $id=intval($_GET['id']);
     if(isset($_SESSION['cart'][$id])){
@@ -21,14 +61,20 @@ if(isset($_GET['action']) && $_GET['action']=="add"){
     // Store message in session to display after redirect
     if (isset($message)) $_SESSION['message'] = $message;
     if (isset($error)) $_SESSION['error'] = $error;
-    echo "<script type='text/javascript'> document.location ='my-cart.php'; </script>";
+    
+    // Redirect back to product page with slugs if available
+    if(!empty($category_slug) && !empty($subcategory_slug) && !empty($product_slug)) {
+        echo "<script type='text/javascript'> document.location ='/products/{$category_slug}/{$subcategory_slug}/{$product_slug}/'; </script>";
+    } else {
+        echo "<script type='text/javascript'> document.location ='/product-details.php?pid={$pid}'; </script>";
+    }
     exit();
 }
-$pid=intval($_GET['pid']);
+
 if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
     if(strlen($_SESSION['login'])==0)
     {   
-        header('location:login.php');
+        header('location:/login.php');
     }
     else
     {
@@ -40,10 +86,11 @@ if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
         } else {
             $_SESSION['message'] = "Product is already in your wishlist";
         }
-        header('location:my-wishlist.php');
+        header('location:/my-wishlist.php');
         exit();
     }
 }
+
 if(isset($_POST['submit']))
 {
     $qty=$_POST['quality'];
@@ -54,7 +101,13 @@ if(isset($_POST['submit']))
     $review=$_POST['review'];
     mysqli_query($con,"insert into productreviews(productId,quality,price,value,name,summary,review) values('$pid','$qty','$price','$value','$name','$summary','$review')");
     $_SESSION['message'] = "Review submitted successfully";
-    echo "<script>window.location.href='product-details.php?pid=$pid';</script>";
+    
+    // Redirect back to product page with slugs if available
+    if(!empty($category_slug) && !empty($subcategory_slug) && !empty($product_slug)) {
+        echo "<script>window.location.href='/products/{$category_slug}/{$subcategory_slug}/{$product_slug}/';</script>";
+    } else {
+        echo "<script>window.location.href='/product-details.php?pid=$pid';</script>";
+    }
     exit();
 }
 
@@ -73,7 +126,8 @@ $store_email = "roziekithei@gmail.com"; // Replace with actual store email
         <meta name="keywords" content="MediaCenter, Template, eCommerce">
         <meta name="robots" content="all">
         <title>Product Details</title>
-        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <base href="/">
+        <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
@@ -528,7 +582,7 @@ $store_email = "roziekithei@gmail.com"; // Replace with actual store email
             }
         </style>
 
-        <link rel="shortcut icon" href="assets/images/favicon.ico">
+        <link rel="shortcut icon" href="/assets/images/favicon.ico">
     </head>
     <body class="cnt-home">
     
@@ -542,13 +596,16 @@ $store_email = "roziekithei@gmail.com"; // Replace with actual store email
     <div class="container">
         <div class="breadcrumb-inner">
 <?php
-$ret=mysqli_query($con,"select category.categoryName as catname,subcategory.subcategory as subcatname,products.productName as pname from products join category on category.id=products.category join subcategory on subcategory.id=products.subcategory where products.id='$pid'");
+$ret=mysqli_query($con,"select category.categoryName as catname, category.slug as cat_slug, subcategory.subcategory as subcatname, subcategory.s_slug as subcat_slug, products.productName as pname, products.p_slug as p_slug from products join category on category.id=products.category join subcategory on subcategory.id=products.subcategory where products.id='$pid'");
 while ($rw=mysqli_fetch_array($ret)) {
+    $cat_slug = $rw['cat_slug'];
+    $subcat_slug = $rw['subcat_slug'];
+    $p_slug = $rw['p_slug'];
 ?>
             <ul class="list-inline list-unstyled">
-                <li><a href="index.php">Home</a></li>
-                <li><?php echo htmlentities($rw['catname']);?></a></li>
-                <li><?php echo htmlentities($rw['subcatname']);?></li>
+                <li><a href="/index.php">Home</a></li>
+                <li><a href="/products/<?php echo $cat_slug; ?>/"><?php echo htmlentities($rw['catname']);?></a></li>
+                <li><a href="/products/<?php echo $cat_slug; ?>/<?php echo $subcat_slug; ?>/"><?php echo htmlentities($rw['subcatname']);?></a></li>
                 <li class='active'><?php echo htmlentities($rw['pname']);?></li>
             </ul>
             <?php }?>
@@ -570,32 +627,32 @@ while ($rw=mysqli_fetch_array($ret)) {
                         <div class="product-slider">
                             <div class="main-slider">
                                 <div>
-                                    <img src="admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage1']);?>" alt="<?php echo htmlentities($row['productName']);?>">
+                                    <img src="/admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage1']);?>" alt="<?php echo htmlentities($row['productName']);?>">
                                 </div>
                                 <?php if(!empty($row['productImage2'])): ?>
                                 <div>
-                                    <img src="admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage2']);?>" alt="<?php echo htmlentities($row['productName']);?>">
+                                    <img src="/admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage2']);?>" alt="<?php echo htmlentities($row['productName']);?>">
                                 </div>
                                 <?php endif; ?>
                                 <?php if(!empty($row['productImage3'])): ?>
                                 <div>
-                                    <img src="admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage3']);?>" alt="<?php echo htmlentities($row['productName']);?>">
+                                    <img src="/admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage3']);?>" alt="<?php echo htmlentities($row['productName']);?>">
                                 </div>
                                 <?php endif; ?>
                             </div>
                             
                             <div class="thumb-slider">
                                 <div>
-                                    <img src="admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage1']);?>" alt="Thumbnail">
+                                    <img src="/admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage1']);?>" alt="Thumbnail">
                                 </div>
                                 <?php if(!empty($row['productImage2'])): ?>
                                 <div>
-                                    <img src="admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage2']);?>" alt="Thumbnail">
+                                    <img src="/admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage2']);?>" alt="Thumbnail">
                                 </div>
                                 <?php endif; ?>
                                 <?php if(!empty($row['productImage3'])): ?>
                                 <div>
-                                    <img src="admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage3']);?>" alt="Thumbnail">
+                                    <img src="/admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage3']);?>" alt="Thumbnail">
                                 </div>
                                 <?php endif; ?>
                             </div>
@@ -622,8 +679,6 @@ while ($rw=mysqli_fetch_array($ret)) {
                                 </div>
                             </div>
                             <?php } ?>
-
-                            
 
                             <div class="stock-container info-container m-t-10">
                                 <div class="row">
@@ -671,7 +726,11 @@ while ($rw=mysqli_fetch_array($ret)) {
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="favorite-button m-t-10">
-                                            <a class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="Wishlist" href="product-details.php?pid=<?php echo htmlentities($row['id'])?>&&action=wishlist">
+                                            <?php if(!empty($category_slug) && !empty($subcategory_slug) && !empty($product_slug)): ?>
+                                            <a class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="Wishlist" href="/products/<?php echo $category_slug; ?>/<?php echo $subcategory_slug; ?>/<?php echo $product_slug; ?>/?action=wishlist&pid=<?php echo htmlentities($row['id'])?>">
+                                            <?php else: ?>
+                                            <a class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="Wishlist" href="/product-details.php?pid=<?php echo htmlentities($row['id'])?>&&action=wishlist">
+                                            <?php endif; ?>
                                                 <i class="fa fa-heart"></i>
                                             </a>
                                         </div>
@@ -697,7 +756,11 @@ while ($rw=mysqli_fetch_array($ret)) {
                                     </div>
                                     <div class="col-sm-7">
                                         <?php if($row['stockQuantity'] >'0'){ ?>
-                                        <a href="product-details.php?action=add&id=<?php echo $row['id']; ?>" class="btn btn-primary add-to-cart-btn">
+                                        <?php if(!empty($category_slug) && !empty($subcategory_slug) && !empty($product_slug)): ?>
+                                        <a href="/products/<?php echo $category_slug; ?>/<?php echo $subcategory_slug; ?>/<?php echo $product_slug; ?>/?action=add&id=<?php echo $row['id']; ?>" class="btn btn-primary add-to-cart-btn">
+                                        <?php else: ?>
+                                        <a href="/product-details.php?action=add&id=<?php echo $row['id']; ?>" class="btn btn-primary add-to-cart-btn">
+                                        <?php endif; ?>
                                             <i class="fa fa-shopping-cart inner-right-vs"></i> ADD TO CART
                                         </a>
                                         <?php } else { ?>
@@ -712,7 +775,10 @@ while ($rw=mysqli_fetch_array($ret)) {
                                 <?php 
                                 $product_name = urlencode($row['productName']);
                                 $product_price = $row['productPrice'];
-                                $product_url = urlencode((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+                                $current_url = !empty($category_slug) && !empty($subcategory_slug) && !empty($product_slug) 
+                                    ? "https://lewvitec.co.ke/products/{$category_slug}/{$subcategory_slug}/{$product_slug}/"
+                                    : (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+                                $product_url = urlencode($current_url);
                                 $whatsapp_message = urlencode("Hello! I would like to order:\nProduct: {$row['productName']}\nPrice: Kes. {$row['productPrice']}\n\nPlease contact me to complete the order.");
                                 $email_subject = urlencode("Order Inquiry: {$row['productName']}");
                                 $email_body = rawurlencode("Hello,
@@ -721,7 +787,7 @@ I am interested in ordering the following product:
 
 Product Name: {$row['productName']}
 Product Price: Kes. {$row['productPrice']}
-Product URL: {$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}
+Product URL: {$current_url}
 
 Please contact me with information on how to complete my order.
 
@@ -765,6 +831,7 @@ Thank you.");
 
                                 <div id="review" class="tab-pane">
                                     <div class="product-tab">
+                                        <!-- Review content remains the same -->
                                         <div class="product-reviews">
                                             <h4 class="title">Customer Reviews</h4>
                                             <?php 
@@ -783,6 +850,7 @@ Thank you.");
 
                                         <div class="product-add-review">
                                             <h4 class="title">Write your own review</h4>
+                                            <!-- Review form remains the same -->
                                             <div class="review-table">
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered"> 
@@ -869,42 +937,21 @@ Thank you.");
                     <h3 class="section-title">Related Products</h3>
                     <div class="product-grid">
                         <?php 
-                        $qry=mysqli_query($con,"select * from products where subCategory='$subcid' and category='$cid' and id != '$pid' limit 4");
+                        $qry=mysqli_query($con,"select p.*, c.slug as cat_slug, s.s_slug as subcat_slug from products p join category c on p.category = c.id join subcategory s on p.subCategory = s.id where p.subCategory='$subcid' and p.category='$cid' and p.id != '$pid' limit 4");
                         while($rw=mysqli_fetch_array($qry)) {
+                            $related_product_url = !empty($rw['p_slug']) 
+                                ? "/products/{$rw['cat_slug']}/{$rw['subcat_slug']}/{$rw['p_slug']}/" 
+                                : "/product-details.php?pid=" . htmlentities($rw['id']);
                         ?>    
                         <div class="product-card">
                             <div class="product-image">
-                                <a href="product-details.php?pid=<?php echo htmlentities($rw['id']);?>">
-                                    <img src="admin/productimages/<?php echo htmlentities($rw['id']);?>/<?php echo htmlentities($rw['productImage1']);?>" alt="<?php echo htmlentities($rw['productName']);?>">
+                                <a href="<?php echo $related_product_url; ?>">
+                                    <img src="/admin/productimages/<?php echo htmlentities($rw['id']);?>/<?php echo htmlentities($rw['productImage1']);?>" alt="<?php echo htmlentities($rw['productName']);?>">
                                 </a>
-                                <div class="product-actions">
-    <?php if ($rw['stockQuantity'] > 0) { ?>
-        <form method="post" action="product-details.php?action=add&id=<?php echo $rw['id']; ?>">
-            <div class="quantity-wrapper">
-                <label for="quantity">Qty:</label>
-                <input type="number" 
-                       id="quantity" 
-                       name="quantity" 
-                       value="1" 
-                       min="1" 
-                       max="<?php echo $rw['stockQuantity']; ?>" 
-                       required>
-            </div>
-            <button type="submit" class="btn-add-cart add-to-cart">
-                <i class="fas fa-shopping-cart"></i> Add to Cart (<?php echo $rw['stockQuantity']; ?> left)
-            </button>
-        </form>
-    <?php } else { ?>
-        <button class="btn-add-cart" disabled>
-            <i class="fas fa-times-circle"></i> Out of stock
-        </button>
-    <?php } ?>
-</div>
-
                             </div>
                             <div class="product-info">
                                 <h3 class="product-name">
-                                    <a href="product-details.php?pid=<?php echo htmlentities($rw['id']);?>"><?php echo htmlentities($rw['productName']);?></a>
+                                    <a href="<?php echo $related_product_url; ?>"><?php echo htmlentities($rw['productName']);?></a>
                                 </h3>
                                 <div class="product-price">
                                     <span class="current-price">Kes. <?php echo number_format(htmlentities($rw['productPrice']));?></span>
@@ -913,17 +960,20 @@ Thank you.");
                                     <?php endif; ?>
                                 </div>
                                 <div class="product-actions">
-    <?php if ($rw['stockQuantity'] > 0) { ?>
-        <a href="product-details.php?action=add&id=<?php echo $rw['id']; ?>" class="btn-add-cart add-to-cart">
-            <i class="fas fa-shopping-cart"></i> Add to Cart (<?php echo $rw['stockQuantity']; ?> left)
-        </a>
-    <?php } else { ?>
-        <button class="btn-add-cart" disabled>
-            <i class="fas fa-times-circle"></i> Out of stock
-        </button>
-    <?php } ?>
-</div>
-
+                                    <?php if ($rw['stockQuantity'] > 0) { ?>
+                                        <?php if(!empty($rw['p_slug'])): ?>
+                                        <a href="/products/<?php echo $rw['cat_slug']; ?>/<?php echo $rw['subcat_slug']; ?>/<?php echo $rw['p_slug']; ?>/?action=add&id=<?php echo $rw['id']; ?>" class="btn-add-cart add-to-cart">
+                                        <?php else: ?>
+                                        <a href="/product-details.php?action=add&id=<?php echo $rw['id']; ?>" class="btn-add-cart add-to-cart">
+                                        <?php endif; ?>
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart (<?php echo $rw['stockQuantity']; ?> left)
+                                        </a>
+                                    <?php } else { ?>
+                                        <button class="btn-add-cart" disabled>
+                                            <i class="fas fa-times-circle"></i> Out of stock
+                                        </button>
+                                    <?php } ?>
+                                </div>
                             </div>
                         </div>
                         <?php } ?>
@@ -943,8 +993,8 @@ Thank you.");
 </div>
 
 <!-- JavaScripts -->
-<script src="assets/js/jquery-1.11.1.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
