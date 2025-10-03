@@ -455,12 +455,11 @@
                             $sql=mysqli_query($con,"SELECT id, categoryName, slug FROM category LIMIT 9");
                             while($row=mysqli_fetch_array($sql)) {
                                 $catId = $row['id'];
-                                $catSlug = $row['slug'];
-                                $subSql=mysqli_query($con,"SELECT id, subcategory, s_slug FROM subcategory WHERE categoryid='$catId'");
+                                 $subSql=mysqli_query($con,"SELECT id, subcategory, s_slug FROM subcategory WHERE categoryid='$catId'");
                                 $hasSubcategories = mysqli_num_rows($subSql) > 0;
                             ?>
                             <li class="dropdown yamm">
-                                <a href="products/<?php echo $catSlug; ?>/">
+                                <a href="category.php?cid=<?php echo $catId;?>">
                                     <span class="nav-icon"></span>
                                     <?php echo $row['categoryName'];?>
                                 </a>
@@ -471,11 +470,9 @@
                                     <ul class="dropdown-menu">
                                         <?php 
                                         mysqli_data_seek($subSql, 0);
-                                        while($subRow=mysqli_fetch_array($subSql)) { 
-                                            $subSlug = $subRow['s_slug'];
-                                        ?>
+                                        while($subRow=mysqli_fetch_array($subSql)) { ?>
                                             <li>
-                                                <a href="products/<?php echo $catSlug; ?>/<?php echo $subSlug; ?>/">
+                                                <a href="sub-category.php?scid=<?php echo $subRow['id'];?>">
                                                     <span class="dropdown-item-icon">➡️</span>
                                                     <?php echo $subRow['subcategory'];?>
                                                 </a>
