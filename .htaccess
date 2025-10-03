@@ -9,29 +9,23 @@
     RewriteRule ^(.*)$ $1.php [L]
 
     # ------------------------------------------------------------
-    # 2. Product URLs (3 segments: category / subcategory / product)
+    # 2. Product URLs (category / subcategory / product)
     # Example: /products/microphones/wired-microphones/akg-d7-wired-microphone/
     # ------------------------------------------------------------
     RewriteRule ^products/([^/]+)/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA]
 
     # ------------------------------------------------------------
-    # 3. Subcategory pages (2 segments: category / subcategory)
+    # 3. Subcategory pages (category / subcategory)
     # Example: /products/speakers/mid-range-speakers/
     # ------------------------------------------------------------
     RewriteRule ^products/([^/]+)/([^/]+)/?$ category.php?category_slug=$1&subcategory_slug=$2 [L,QSA]
 
     # ------------------------------------------------------------
-    # 4. Product URLs (short form: category / product) 
-    # Example: /products/microphones/akg-d7-wired-microphone/
-    # NOTE: This comes *after* subcategory rule so it won’t hijack.
-    # ------------------------------------------------------------
-    RewriteRule ^products/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA]
-
-    # ------------------------------------------------------------
-    # 5. Category pages (1 segment: category only)
+    # 4. Category pages (category only)
     # Example: /products/microphones/
     # ------------------------------------------------------------
     RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA]
 </IfModule>
+
 
 # php -- END cPanel-generated handler, do not edit
