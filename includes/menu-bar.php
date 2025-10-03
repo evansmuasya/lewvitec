@@ -452,16 +452,23 @@
                             </li>
 
                             <?php 
-                            $sql=mysqli_query($con,"SELECT id, categoryName FROM category LIMIT 9");
-                            while($row=mysqli_fetch_array($sql)) {
-                                $catId = $row['id'];
-                                $subSql=mysqli_query($con,"SELECT id, subcategory FROM subcategory WHERE categoryid='$catId'");
-                                $hasSubcategories = mysqli_num_rows($subSql) > 0;
-                            ?>
-                            <li class="dropdown yamm">
-    <a href="/products/<?php echo $catSlug; ?>/">
+$sql=mysqli_query($con,"SELECT id, categoryName, slug FROM category WHERE slug IS NOT NULL AND slug != '' LIMIT 9");
+while($row=mysqli_fetch_array($sql)) {
+    $catId = $row['id'];
+    $catSlug = trim($row['slug']);
+    
+    // Skip if slug is empty
+    if(empty($catSlug)) {
+        continue;
+    }
+    
+    $subSql=mysqli_query($con,"SELECT id, subcategory, s_slug FROM subcategory WHERE categoryid='$catId' AND s_slug IS NOT NULL AND s_slug != ''");
+    $hasSubcategories = mysqli_num_rows($subSql) > 0;
+?>
+<li class="dropdown yamm">
+    <a href="/products/<?php echo urlencode($catSlug); ?>/">
         <span class="nav-icon"></span>
-        <?php echo $row['categoryName'];?>
+        <?php echo htmlspecialchars($row['categoryName']);?>
     </a>
     <?php if($hasSubcategories): ?>
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -471,19 +478,23 @@
             <?php 
             mysqli_data_seek($subSql, 0);
             while($subRow=mysqli_fetch_array($subSql)) { 
-                $subSlug = $subRow['s_slug'];
+                $subSlug = trim($subRow['s_slug']);
+                // Skip if subcategory slug is empty
+                if(empty($subSlug)) {
+                    continue;
+                }
             ?>
                 <li>
-                    <a href="/products/<?php echo $catSlug; ?>/<?php echo $subSlug; ?>/">
+                    <a href="/products/<?php echo urlencode($catSlug); ?>/<?php echo urlencode($subSlug); ?>/">
                         <span class="dropdown-item-icon">➡️</span>
-                        <?php echo $subRow['subcategory'];?>
+                        <?php echo htmlspecialchars($subRow['subcategory']);?>
                     </a>
                 </li>
             <?php } ?>
         </ul>
     <?php endif; ?>
 </li>
-                            <?php } ?>
+<?php } ?>
 
                             
                         
