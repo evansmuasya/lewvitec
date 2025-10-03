@@ -14,10 +14,6 @@ if(empty($category_slug) || $category_slug == '') {
     exit();
 }
 
-// Get product subcategory slug for URL generation
-$subcat_query = mysqli_query($con, "SELECT s.s_slug FROM subcategory s WHERE s.id = '".$row['subCategory']."'");
-$subcat_data = mysqli_fetch_array($subcat_query);
-$subcategory_slug = $subcat_data['s_slug'] ?? '';
 
 // Get category ID from slug
 $cat_query = mysqli_query($con, "SELECT id, categoryName FROM category WHERE slug = '$category_slug'");
@@ -429,7 +425,7 @@ if (isset($_GET['pid']) && $_GET['action'] == "wishlist") {
                         if ($num > 0) {
                             echo '<div class="product-grid">';
                             while ($row = mysqli_fetch_array($ret)) {
-                               <?php
+                               
 // Get product slug and subcategory slug for clean URLs
 $product_slug = $row['p_slug'] ?? '';
 
