@@ -386,8 +386,8 @@ if (isset($_GET['pid']) && $_GET['action'] == "wishlist") {
         <!-- Breadcrumb -->
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="lewvitec.co.ke">Home</a></li>
-                <li class="breadcrumb-item"><a href="categories.php">Categories</a></li>
+                <li class="breadcrumb-item"><a href="/index.php">Home</a></li>
+                <li class="breadcrumb-item"><a href="/categories.php">Categories</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
                     <?php echo $category_name ? htmlspecialchars($category_name) : 'Products'; ?>
                 </li>
@@ -472,7 +472,7 @@ if (isset($_GET['pid']) && $_GET['action'] == "wishlist") {
                                 <i class="fas fa-box-open"></i>
                                 <h3>No Products Found</h3>
                                 <p>We couldn't find any products in this category.</p>
-                                <a href="index.php" class="btn btn-primary mt-3">Browse Other Categories</a>
+                                <a href="/index.php" class="btn btn-primary mt-3">Browse Other Categories</a>
                             </div>
                         <?php } ?>
                     </div><!-- /.category-product -->
