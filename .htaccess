@@ -8,16 +8,16 @@
     
     # Rewrite slugs to actual PHP files
     
-    # 1. PRODUCT DETAILS - 3 segments (must come first)
+    # 1. First handle 3-segment product URLs
     RewriteRule ^products/([^/]+)/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA]
     
-    # 2. CATEGORY/SUBCATEGORY - 2 segments  
+    # 2. Then handle 2-segment category/subcategory URLs  
     RewriteRule ^products/([^/]+)/([^/]+)/?$ category.php?category_slug=$1&subcategory_slug=$2 [L,QSA]
     
-    # 3. FIND SUB CATEGORY FOR PRODUCT - 2 segments (product without subcategory)
+    # 3. Then handle 2-segment product URLs (missing subcategory)
     RewriteRule ^product/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA]
     
-    # 4. CATEGORY ONLY - 1 segment
+    # 4. Finally handle 1-segment category URLs
     RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA]
 </IfModule>
 # php -- END cPanel-generated handler, do not edit
