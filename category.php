@@ -432,7 +432,7 @@ if (isset($_GET['pid']) && $_GET['action'] == "wishlist") {
                                 // Get product slug for clean URLs
                                 $product_slug = $row['p_slug'] ?? '';
                                 $product_url = !empty($product_slug) ? 
-                                  "/products/{$category_slug}/{$subcategory_slug}/{$product_slug}/" : 
+                                  "/products/{$category_slug}/{$product_slug}/" : 
                                   "/product-details.php?pid=" . htmlentities($row['id']);
                                 ?>
                                 <div class="product-card">
