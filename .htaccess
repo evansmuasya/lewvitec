@@ -8,14 +8,14 @@
     
     # Rewrite slugs to actual PHP files
     
-    # 1. First handle 3-segment product URLs
+    # 1. First handle 3-segment product URLs (category/subcategory/product)
     RewriteRule ^products/([^/]+)/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA]
     
-    # 2. Then handle 2-segment category/subcategory URLs  
+    # 2. Then handle 2-segment category URLs (category/subcategory)
     RewriteRule ^products/([^/]+)/([^/]+)/?$ category.php?category_slug=$1&subcategory_slug=$2 [L,QSA]
     
-    # 3. Then handle 2-segment product URLs (missing subcategory)
-    RewriteRule ^product/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA]
+    # 3. Handle 2-segment product URLs (category/product) - redirect to find subcategory
+    RewriteRule ^product/([^/]+)/([^/]+)/?$ find-subcategory.php?category_slug=$1&product_slug=$2 [L,QSA]
     
     # 4. Finally handle 1-segment category URLs
     RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA]
