@@ -5,6 +5,8 @@ include('includes/config.php');
 
 // ================= SLUG-BASED CATEGORY LOADING =================
 $category_slug = $_GET['category_slug'] ?? '';
+// URL decode the slug to handle spaces and special characters
+$category_slug = urldecode($category_slug);
 
 // Validate slug - redirect if empty or invalid
 if(empty($category_slug) || $category_slug == '') {

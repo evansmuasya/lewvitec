@@ -6,6 +6,9 @@ include('includes/config.php');
 // ================= SLUG-BASED SUBCATEGORY LOADING =================
 $category_slug = $_GET['category_slug'] ?? '';
 $subcategory_slug = $_GET['subcategory_slug'] ?? '';
+// URL decode the slugs to handle spaces and special characters
+$category_slug = urldecode($category_slug);
+$subcategory_slug = urldecode($subcategory_slug);
 
 // Validate slugs - redirect if empty or invalid
 if(empty($category_slug) || empty($subcategory_slug)) {
