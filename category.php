@@ -14,6 +14,11 @@ if(empty($category_slug) || $category_slug == '') {
     exit();
 }
 
+// Get product subcategory slug for URL generation
+$subcat_query = mysqli_query($con, "SELECT s.s_slug FROM subcategory s WHERE s.id = '".$row['subCategory']."'");
+$subcat_data = mysqli_fetch_array($subcat_query);
+$subcategory_slug = $subcat_data['s_slug'] ?? '';
+
 // Get category ID from slug
 $cat_query = mysqli_query($con, "SELECT id, categoryName FROM category WHERE slug = '$category_slug'");
 if(mysqli_num_rows($cat_query) == 0) {
@@ -427,8 +432,8 @@ if (isset($_GET['pid']) && $_GET['action'] == "wishlist") {
                                 // Get product slug for clean URLs
                                 $product_slug = $row['p_slug'] ?? '';
                                 $product_url = !empty($product_slug) ? 
-                                    "products/{$category_slug}/{$product_slug}/" : 
-                                    "product-details.php?pid=" . htmlentities($row['id']);
+                                  "/products/{$category_slug}/{$subcategory_slug}/{$product_slug}/" : 
+                                  "/product-details.php?pid=" . htmlentities($row['id']);
                                 ?>
                                 <div class="product-card">
                                     <div class="product-image">
