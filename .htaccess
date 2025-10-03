@@ -7,16 +7,17 @@
     RewriteRule ^(.*)$ $1.php [L]
     
     # Rewrite slugs to actual PHP files
-    # Rule for category/subcategory/product (3 segments)
+    
+    # 1. PRODUCT DETAILS - 3 segments (must come first)
     RewriteRule ^products/([^/]+)/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&subcategory_slug=$2&product_slug=$3 [L,QSA]
     
-    # NEW RULE: Handle category/product (2 segments) and redirect to find subcategory
-    RewriteRule ^products/([^/]+)/([^/]+)/?$ find-subcategory.php?category_slug=$1&product_slug=$2 [L,QSA]
+    # 2. CATEGORY/SUBCATEGORY - 2 segments  
+    RewriteRule ^products/([^/]+)/([^/]+)/?$ category.php?category_slug=$1&subcategory_slug=$2 [L,QSA]
     
-    # Rule for category/subcategory only
-    RewriteRule ^products/([^/]+)/([^/]+)/?$ category.php?category=$1&subcategory=$2 [L,QSA]
+    # 3. FIND SUB CATEGORY FOR PRODUCT - 2 segments (product without subcategory)
+    RewriteRule ^product/([^/]+)/([^/]+)/?$ product-details.php?category_slug=$1&product_slug=$2 [L,QSA]
     
-    # Rule for category only
-    RewriteRule ^products/([^/]+)/?$ category.php?category=$1 [L,QSA]
+    # 4. CATEGORY ONLY - 1 segment
+    RewriteRule ^products/([^/]+)/?$ category.php?category_slug=$1 [L,QSA]
 </IfModule>
 # php -- END cPanel-generated handler, do not edit
