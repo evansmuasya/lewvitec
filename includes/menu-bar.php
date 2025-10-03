@@ -452,14 +452,15 @@
                             </li>
 
                             <?php 
-                            $sql=mysqli_query($con,"SELECT id, categoryName FROM category LIMIT 9");
+                            $sql=mysqli_query($con,"SELECT id, categoryName, slug FROM category LIMIT 9");
                             while($row=mysqli_fetch_array($sql)) {
                                 $catId = $row['id'];
-                                $subSql=mysqli_query($con,"SELECT id, subcategory FROM subcategory WHERE categoryid='$catId'");
+                                $catSlug = $row['slug'];
+                                $subSql=mysqli_query($con,"SELECT id, subcategory, s_slug FROM subcategory WHERE categoryid='$catId'");
                                 $hasSubcategories = mysqli_num_rows($subSql) > 0;
                             ?>
                             <li class="dropdown yamm">
-                                <a href="category.php?cid=<?php echo $catId;?>">
+                                <a href="products/<?php echo $catSlug; ?>/">
                                     <span class="nav-icon"></span>
                                     <?php echo $row['categoryName'];?>
                                 </a>
@@ -470,9 +471,11 @@
                                     <ul class="dropdown-menu">
                                         <?php 
                                         mysqli_data_seek($subSql, 0);
-                                        while($subRow=mysqli_fetch_array($subSql)) { ?>
+                                        while($subRow=mysqli_fetch_array($subSql)) { 
+                                            $subSlug = $subRow['s_slug'];
+                                        ?>
                                             <li>
-                                                <a href="sub-category.php?scid=<?php echo $subRow['id'];?>">
+                                                <a href="products/<?php echo $catSlug; ?>/<?php echo $subSlug; ?>/">
                                                     <span class="dropdown-item-icon">➡️</span>
                                                     <?php echo $subRow['subcategory'];?>
                                                 </a>
