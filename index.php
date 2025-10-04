@@ -65,463 +65,500 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
 	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css">
 	    
-	    <!-- Custom CSS for Prime Audio Solutions style -->
+	    <!-- Custom CSS for carousel and category sections -->
 	    <style>
-        :root {
-            --primary-color: #1a56db;
-            --secondary-color: #1e429f;
-            --accent-color: #3b82f6;
-            --light-color: #f8fafc;
-            --dark-color: #1f2937;
-            --text-color: #374151;
-            --border-color: #e5e7eb;
-        }
+        /* Carousel Styles */
+
+/* Add the modified CSS here */
+.container {
+  width: 100%;
+  padding-right: 0;
+  padding-left: 0;
+  margin-right: auto;
+  margin-left: auto;
+}
+
         
-        body {
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        /* Hero Section */
-        .hero-section {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 80px 0;
-            margin-bottom: 60px;
-            border-radius: 0 0 20px 20px;
-        }
-        
-        .hero-content {
-            max-width: 600px;
-        }
-        
-        .hero-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-        
-        .hero-subtitle {
-            font-size: 1.25rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-        
-        .hero-btn {
-            display: inline-block;
-            background: white;
-            color: var(--primary-color);
-            padding: 12px 30px;
-            border-radius: 30px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .hero-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            color: var(--primary-color);
-        }
-        
-        /* Categories Section */
-        .categories-section {
-            padding: 60px 0;
-            background: var(--light-color);
-        }
-        
-        .section-title {
-            text-align: center;
-            font-size: 2.25rem;
-            font-weight: 700;
-            margin-bottom: 50px;
-            color: var(--dark-color);
-        }
-        
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 25px;
-        }
-        
-        .category-card {
-            background: white;
-            border-radius: 12px;
-            padding: 30px 20px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1px solid var(--border-color);
-        }
-        
-        .category-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .category-icon {
-            width: 70px;
-            height: 70px;
-            background: var(--light-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            color: var(--primary-color);
-            font-size: 28px;
-        }
-        
-        .category-name {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--dark-color);
-            margin: 0;
-        }
-        
-        /* Products Section */
-        .products-section {
-            padding: 80px 0;
-        }
-        
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-        }
-        
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .product-image {
-            position: relative;
-            height: 220px;
-            overflow: hidden;
-        }
-        
-        .product-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        
-        .product-card:hover .product-img {
-            transform: scale(1.05);
-        }
-        
-        .image-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .product-card:hover .image-overlay {
-            opacity: 1;
-        }
-        
-        .view-details {
-            color: white;
-            font-weight: 600;
-            padding: 8px 15px;
-            border: 2px solid white;
-            border-radius: 25px;
-            font-size: 14px;
-        }
-        
-        .discount-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #ef4444;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .product-info {
-            padding: 20px;
-        }
-        
-        .product-name {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--dark-color);
-        }
-        
-        .product-name a {
-            color: var(--dark-color);
-            text-decoration: none;
-        }
-        
-        .product-name a:hover {
-            color: var(--primary-color);
-        }
-        
-        .product-pricing {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .current-price {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-        
-        .original-price {
-            font-size: 1rem;
-            color: #6b7280;
-            text-decoration: line-through;
-        }
-        
-        .product-availability {
-            margin-bottom: 15px;
-        }
-        
-        .in-stock {
-            color: #10b981;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .out-of-stock {
-            color: #ef4444;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .product-actions {
-            margin-top: 15px;
-        }
-        
-        .add-to-cart-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 12px 15px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            font-size: 15px;
-        }
-        
-        .add-to-cart-btn:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-            color: white;
-        }
-        
-        .out-of-stock-btn {
-            width: 100%;
-            padding: 12px 15px;
-            background: #f3f4f6;
-            color: #9ca3af;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: not-allowed;
-            font-size: 15px;
-        }
-        
-        /* Featured Brands Section */
-        .brands-section {
-            padding: 60px 0;
-            background: var(--light-color);
-        }
-        
-        .brands-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 30px;
-            align-items: center;
-        }
-        
-        .brand-logo {
-            filter: grayscale(100%);
-            opacity: 0.7;
-            transition: all 0.3s ease;
-            max-height: 60px;
-            width: auto;
-        }
-        
-        .brand-logo:hover {
-            filter: grayscale(0%);
-            opacity: 1;
-        }
-        
-        /* Call to Action Section */
-        .cta-section {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 80px 0;
-            text-align: center;
-            border-radius: 20px;
-            margin: 60px 0;
-        }
-        
-        .cta-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-        
-        .cta-subtitle {
-            font-size: 1.25rem;
-            margin-bottom: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            opacity: 0.9;
-        }
-        
-        .cta-btn {
-            display: inline-block;
-            background: white;
-            color: var(--primary-color);
-            padding: 15px 35px;
-            border-radius: 30px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            color: var(--primary-color);
-        }
-        
-        /* Responsive Adjustments */
-        @media (max-width: 992px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            
-            .categories-grid {
-                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-                gap: 20px;
-            }
-            
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 25px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .hero-section {
-                padding: 60px 0;
-                text-align: center;
-            }
-            
-            .hero-title {
-                font-size: 2rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.125rem;
-            }
-            
-            .section-title {
-                font-size: 1.75rem;
-            }
-            
-            .categories-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
-            
-            .category-card {
-                padding: 20px 15px;
-            }
-            
-            .category-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 24px;
-            }
-            
-            .products-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-            
-            .product-image {
-                height: 180px;
-            }
-            
-            .cta-title {
-                font-size: 2rem;
-            }
-            
-            .cta-subtitle {
-                font-size: 1.125rem;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .hero-title {
-                font-size: 1.75rem;
-            }
-            
-            .categories-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-            
-            .products-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .brands-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-        }
+.main-slider {
+    margin: 30px 0;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.slide {
+    position: relative;
+    height: 400px;
+}
+
+.slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slide-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: white;
+    padding: 30px;
+}
+
+.slide-content h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.slide-content p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    max-width: 600px;
+}
+
+.btn {
+    display: inline-block;
+    background: #667eea;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background: #5a67d8;
+    transform: translateY(-2px);
+}
+
+/* Controls for slider */
+.slider-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.control-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Category Section Styles */
+.categories-section {
+    padding: 30px 0;
+    background: #f8fafc;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    padding: 0 20px;
+}
+
+.category-card {
+    background: white;
+    border-radius: 8px;
+    padding: 15px 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.category-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #667eea;
+}
+
+.category-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0;
+}
+
+/* Products by Category Section */
+.category-products-section {
+    padding: 40px 0;
+}
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 20px;
+}
+
+.category-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0;
+}
+
+.view-all-category {
+    color: #667eea;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.view-all-category i {
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+}
+
+.view-all-category:hover i {
+    transform: translateX(5px);
+}
+
+/* Product card adjustments for smaller icons */
+.product-card .product-actions .add-to-cart-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.product-card .product-actions .add-to-cart-btn {
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+/* Products Section */
+.products-section {
+    padding: 40px 0;
+    background: #f8fafc;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 0 20px;
+}
+
+.section-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 0 20px;
+    margin-bottom: 40px;
+}
+
+.product-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+}
+
+.product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-img {
+    transform: scale(1.05);
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-card:hover .image-overlay {
+    opacity: 1;
+}
+
+.view-details {
+    color: white;
+    font-weight: 600;
+    padding: 8px 15px;
+    border: 2px solid white;
+    border-radius: 25px;
+    font-size: 14px;
+}
+
+.discount-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ef4444;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.product-info {
+    padding: 15px;
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2d3748;
+}
+
+.product-name a {
+    color: #2d3748;
+    text-decoration: none;
+}
+
+.product-name a:hover {
+    color: #667eea;
+}
+
+.product-pricing {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.current-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.original-price {
+    font-size: 14px;
+    color: #718096;
+    text-decoration: line-through;
+}
+
+.product-availability {
+    margin-bottom: 12px;
+}
+
+.in-stock {
+    color: #48bb78;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.out-of-stock {
+    color: #ef4444;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.product-actions {
+    margin-top: 15px;
+}
+
+.add-to-cart-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 10px 15px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.add-to-cart-btn:hover {
+    background: #5a67d8;
+    transform: translateY(-1px);
+}
+
+.out-of-stock-btn {
+    width: 100%;
+    padding: 10px 15px;
+    background: #e2e8f0;
+    color: #718096;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: not-allowed;
+    font-size: 14px;
+}
+
+.section-footer {
+    text-align: center;
+    padding: 0 20px;
+}
+
+.view-all-btn {
+    display: inline-block;
+    padding: 12px 25px;
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.view-all-btn:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .slide {
+        height: 250px;
+    }
+
+    .slide-content {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .slide-content h2 {
+        font-size: 20px;
+    }
+
+    .slide-content p {
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+
+    .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .product-image {
+        height: 150px;
+    }
+
+    .product-name {
+        font-size: 14px;
+    }
+
+    .current-price {
+        font-size: 14px;
+    }
+
+    .original-price {
+        font-size: 12px;
+    }
+
+    .add-to-cart-btn {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .slide {
+        height: 200px;
+    }
+
+    .slide-content h2 {
+        font-size: 18px;
+    }
+
+    .slide-content p {
+        font-size: 13px;
+    }
+
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .product-image {
+        height: 130px;
+    }
+
+    .product-name {
+        font-size: 13px;
+    }
+
+    .add-to-cart-btn {
+        font-size: 12px;
+        padding: 7px 10px;
+    }
+}
+
 	    </style>
 		
 		<!-- Favicon -->
@@ -541,156 +578,66 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
 
 <!-- ============================================== HEADER : END ============================================== -->
 <div class="body-content outer-top-xs" id="top-banner-and-menu">
+	<div class="container">
 	
-	<!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">Premium Audio Solutions</h1>
-                <p class="hero-subtitle">Experience sound like never before with our high-quality audio equipment and accessories.</p>
-                <a href="#products" class="hero-btn">Shop Now</a>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Categories Section -->
-    <section class="categories-section">
-        <div class="container">
-            <h2 class="section-title">Our Categories</h2>
-            <div class="categories-grid">
-                <?php
-                $categories = mysqli_query($con, "SELECT * FROM category ORDER BY categoryName LIMIT 6");
-                $category_icons = array(
-                    'Headphones' => 'fas fa-headphones',
-                    'Speakers' => 'fas fa-volume-up',
-                    'Microphones' => 'fas fa-microphone',
-                    'Amplifiers' => 'fas fa-bolt',
-                    'Accessories' => 'fas fa-cable',
-                    'Home Audio' => 'fas fa-home',
-                    'Car Audio' => 'fas fa-car',
-                    'Studio Equipment' => 'fas fa-sliders-h',
-                    'DJ Equipment' => 'fas fa-compact-disc'
-                );
-                
-                while ($category = mysqli_fetch_array($categories)) {
-                    $cat_name = $category['categoryName'];
-                    $cat_slug = $category['slug'];
-                    $icon = isset($category_icons[$cat_name]) ? $category_icons[$cat_name] : 'fas fa-music';
-                ?>
-                <div class="category-card" onclick="window.location.href='/products/<?php echo $cat_slug; ?>/'">
-                    <div class="category-icon">
-                        <i class="<?php echo $icon; ?>"></i>
-                    </div>
-                    <h3 class="category-name"><?php echo htmlentities($cat_name); ?></h3>
+	    <!-- Main Carousel Slider -->
+        <div class="main-slider">
+            <div class="slide">
+                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Summer Sale" class="slide-img">
+                <div class="slide-content">
+                    <h2>Summer Sale Up To 50% Off</h2>
+                    <p>Get the best deals on summer essentials. Limited time offer!</p>
+                    <a href="index.php" class="btn">Shop Now</a>
                 </div>
-                <?php } ?>
             </div>
-        </div>
-    </section>
-    
-    <!-- Featured Products Section -->
-    <section class="products-section" id="products">
-        <div class="container">
-            <h2 class="section-title">Featured Products</h2>
-            <div class="products-grid">
-                <?php
-                $featured_products = mysqli_query($con, "SELECT p.*, c.slug as cat_slug, s.s_slug as subcat_slug 
-                                                      FROM products p 
-                                                      JOIN category c ON p.category = c.id 
-                                                      JOIN subcategory s ON p.subCategory = s.id 
-                                                      WHERE p.productAvailability = 'In Stock'
-                                                      ORDER BY p.id DESC 
-                                                      LIMIT 8");
-                while ($row = mysqli_fetch_array($featured_products)) {
-                    // Generate proper product URL with slugs
-                    $product_url = !empty($row['p_slug']) 
-                        ? "/products/{$row['cat_slug']}/{$row['subcat_slug']}/{$row['p_slug']}/" 
-                        : "/product-details.php?pid=" . htmlentities($row['id']);
-                ?>
-                
-                <div class="product-card">
-                    <div class="product-image">
-                        <a href="<?php echo $product_url; ?>" class="product-image-link">
-                            <img src="admin/productimages/<?php echo htmlentities($row['id']); ?>/<?php echo htmlentities($row['productImage1']); ?>" 
-                                 alt="<?php echo htmlentities($row['productName']); ?>"
-                                 loading="lazy"
-                                 class="product-img">
-                            <div class="image-overlay">
-                                <span class="view-details">View Details</span>
-                            </div>
-                        </a>
-                        
-                        <?php if($row['productPriceBeforeDiscount'] > $row['productPrice']): ?>
-                        <div class="discount-badge">
-                            <span class="discount-percent">
-                                <?php 
-                                $discount = (($row['productPriceBeforeDiscount'] - $row['productPrice']) / $row['productPriceBeforeDiscount']) * 100;
-                                echo round($discount) . '% OFF';
-                                ?>
-                            </span>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-
-                    <div class="product-info">
-                        <h3 class="product-name">
-                            <a href="<?php echo $product_url; ?>">
-                                <?php echo htmlentities($row['productName']); ?>
-                            </a>
-                        </h3>
-
-                        <div class="product-pricing">
-                            <span class="current-price">Kes. <?php echo number_format($row['productPrice']); ?></span>
-                            <?php if($row['productPriceBeforeDiscount'] > $row['productPrice']): ?>
-                            <span class="original-price">Kes. <?php echo number_format($row['productPriceBeforeDiscount']); ?></span>
-                            <?php endif; ?>
-                        </div>
-
-                        <div class="product-availability">
-                            <?php if($row['stockQuantity'] > 0 ): ?>
-                            <span class="in-stock">✓ In Stock</span>
-                            <?php else: ?>
-                            <span class="out-of-stock">✗ Out of Stock</span>
-                            <?php endif; ?>
-                        </div>
-
-                        <div class="product-actions">
-                            <?php if($row['productAvailability'] == 'In Stock'): ?>
-                            <a href="/index.php?action=add&id=<?php echo $row['id']; ?>" 
-                               class="add-to-cart-btn">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="9" cy="21" r="1"></circle>
-                                    <circle cx="20" cy="21" r="1"></circle>
-                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                                </svg>
-                                Add to Cart
-                            </a>
-                            <?php else: ?>
-                            <button class="out-of-stock-btn" disabled>Out of Stock</button>
-                            <?php endif; ?>
-                        </div>
-                    </div>
+            
+            <div class="slider-controls">
+                <div class="control-btn prev-btn">
+                    <i class="fas fa-chevron-left"></i>
                 </div>
-                <?php } ?>
+                <div class="control-btn next-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
             </div>
         </div>
-    </section>
-    
-    <!-- Products by Category Sections -->
-    <?php
-    $categories = mysqli_query($con, "SELECT * FROM category ORDER BY categoryName LIMIT 4");
-    while ($category = mysqli_fetch_array($categories)) {
-        $cat_id = $category['id'];
-        $cat_name = $category['categoryName'];
-        $cat_slug = $category['slug'];
-    ?>
-    <div class="products-section">
-        <div class="container">
-            <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                <h2 class="section-title"><?php echo htmlentities($cat_name); ?></h2>
-                <a href="/products/<?php echo $cat_slug; ?>/" class="view-all-category" style="color: var(--primary-color); font-weight: 600; text-decoration: none; display: flex; align-items: center;">
-                    View More <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
-                </a>
+        
+        <!-- Categories Section -->
+       
+		
+		<div class="furniture-container homepage-container">
+		<div class="row">
+		
+			<div class="col-xs-12 col-sm-12 col-md-3 sidebar">
+				<!-- ================================== TOP NAVIGATION ================================== -->
+	
+<!-- ================================== TOP NAVIGATION : END ================================== -->
+			</div><!-- /.sidemenu-holder -->	
+			
+			<div class="col-xs-12 col-sm-12 col-md-9 homebanner-holder">
+				<!-- ========================================== SECTION – HERO ========================================= -->
+			
+
+
+			
+<!-- ========================================= SECTION – HERO : END ========================================= -->	
+
+<!-- ============================================== INFO BOXES : END ============================================== -->		
+			</div><!-- /.homebanner-holder -->
+			
+		</div><!-- /.row -->
+
+        <!-- Products by Category Sections -->
+        <?php
+        $categories = mysqli_query($con, "SELECT * FROM category ORDER BY categoryName LIMIT 12");
+        while ($category = mysqli_fetch_array($categories)) {
+            $cat_id = $category['id'];
+            $cat_name = $category['categoryName'];
+            $cat_slug = $category['slug'];
+        ?>
+        <div class="category-products-section">
+            <div class="category-header">
+                <h2 class="category-title"><?php echo htmlentities($cat_name); ?></h2>
+                <a href="/products/<?php echo $cat_slug; ?>/" class="view-all-category">View More <i class="fas fa-arrow-right"></i></a>
             </div>
             
             <div class="products-grid">
@@ -700,7 +647,7 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
                                               JOIN category c ON p.category = c.id 
                                               JOIN subcategory s ON p.subCategory = s.id 
                                               WHERE p.category = $cat_id 
-                                              LIMIT 4");
+                                              LIMIT 12");
                 while ($row = mysqli_fetch_array($products)) {
                     // Generate proper product URL with slugs
                     $product_url = !empty($row['p_slug']) 
@@ -758,7 +705,7 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
                             <?php if($row['productAvailability'] == 'In Stock'): ?>
                             <a href="/index.php?action=add&id=<?php echo $row['id']; ?>" 
                                class="add-to-cart-btn">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="9" cy="21" r="1"></circle>
                                     <circle cx="20" cy="21" r="1"></circle>
                                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
@@ -766,7 +713,7 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
                                 Add to Cart
                             </a>
                             <?php else: ?>
-                            <button class="out-of-stock-btn" disabled>Out of Stock</button>
+                           
                             <?php endif; ?>
                         </div>
                     </div>
@@ -774,39 +721,20 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
                 <?php } ?>
             </div>
         </div>
-    </div>
-    <?php } ?>
-    
-    <!-- Brands Section -->
-    <section class="brands-section">
-        <div class="container">
-            <h2 class="section-title">Trusted Brands</h2>
-            <div class="brands-grid">
-                <img src="https://via.placeholder.com/150x60/1a56db/ffffff?text=JBL" alt="JBL" class="brand-logo">
-                <img src="https://via.placeholder.com/150x60/1a56db/ffffff?text=Sony" alt="Sony" class="brand-logo">
-                <img src="https://via.placeholder.com/150x60/1a56db/ffffff?text=Bose" alt="Bose" class="brand-logo">
-                <img src="https://via.placeholder.com/150x60/1a56db/ffffff?text=Sennheiser" alt="Sennheiser" class="brand-logo">
-                <img src="https://via.placeholder.com/150x60/1a56db/ffffff?text=Audio-Technica" alt="Audio-Technica" class="brand-logo">
-                <img src="https://via.placeholder.com/150x60/1a56db/ffffff?text=Shure" alt="Shure" class="brand-logo">
-            </div>
-        </div>
-    </section>
-    
-    <!-- Call to Action Section -->
-    <section class="cta-section">
-        <div class="container">
-            <h2 class="cta-title">Ready to Upgrade Your Sound Experience?</h2>
-            <p class="cta-subtitle">Browse our extensive collection of premium audio equipment and find the perfect solution for your needs.</p>
-            <a href="/products/" class="cta-btn">View All Products</a>
-        </div>
-    </section>
+        <?php } ?>
+
+		
+
 
 <?php include('includes/footer.php');?>
 	
 	<script src="assets/js/jquery-1.11.1.min.js"></script>
+	
 	<script src="assets/js/bootstrap.min.js"></script>
+	
 	<script src="assets/js/bootstrap-hover-dropdown.min.js"></script>
 	<script src="assets/js/owl.carousel.min.js"></script>
+	
 	<script src="assets/js/echo.min.js"></script>
 	<script src="assets/js/jquery.easing-1.3.min.js"></script>
 	<script src="assets/js/bootstrap-slider.min.js"></script>
@@ -820,21 +748,38 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js"></script>
 	
 	<script>
-		// Smooth scrolling for anchor links
-		document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-			anchor.addEventListener('click', function (e) {
-				e.preventDefault();
-				
-				const targetId = this.getAttribute('href');
-				if(targetId === '#') return;
-				
-				const targetElement = document.querySelector(targetId);
-				if(targetElement) {
-					window.scrollTo({
-						top: targetElement.offsetTop - 100,
-						behavior: 'smooth'
-					});
+		// Initialize the slider
+		document.addEventListener('DOMContentLoaded', function() {
+			var slider = tns({
+				container: '.main-slider',
+				items: 1,
+				slideBy: 1,
+				autoplay: true,
+				autoplayTimeout: 5000,
+				autoplayButtonOutput: false,
+				controls: false,
+				nav: false,
+				speed: 1000,
+				responsive: {
+					640: {
+						items: 1
+					},
+					768: {
+						items: 1
+					},
+					1024: {
+						items: 1
+					}
 				}
+			});
+			
+			// Custom controls
+			document.querySelector('.prev-btn').addEventListener('click', function () {
+				slider.goTo('prev');
+			});
+			
+			document.querySelector('.next-btn').addEventListener('click', function () {
+				slider.goTo('next');
 			});
 		});
 	</script>
@@ -853,5 +798,8 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
 		});
 	</script>
 	
+
+	
+
 </body>
 </html>
