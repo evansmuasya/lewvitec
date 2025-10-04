@@ -231,6 +231,33 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
             transform: scale(1.05);
         }
         
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .product-card:hover .image-overlay {
+            opacity: 1;
+        }
+        
+        .view-details {
+            color: white;
+            font-weight: 600;
+            padding: 8px 15px;
+            border: 2px solid white;
+            border-radius: 25px;
+            font-size: 14px;
+        }
+        
         .discount-badge {
             position: absolute;
             top: 15px;
@@ -539,7 +566,10 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
                     'Microphones' => 'fas fa-microphone',
                     'Amplifiers' => 'fas fa-bolt',
                     'Accessories' => 'fas fa-cable',
-                    'Home Audio' => 'fas fa-home'
+                    'Home Audio' => 'fas fa-home',
+                    'Car Audio' => 'fas fa-car',
+                    'Studio Equipment' => 'fas fa-sliders-h',
+                    'DJ Equipment' => 'fas fa-compact-disc'
                 );
                 
                 while ($category = mysqli_fetch_array($categories)) {
@@ -585,6 +615,9 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
                                  alt="<?php echo htmlentities($row['productName']); ?>"
                                  loading="lazy"
                                  class="product-img">
+                            <div class="image-overlay">
+                                <span class="view-details">View Details</span>
+                            </div>
                         </a>
                         
                         <?php if($row['productPriceBeforeDiscount'] > $row['productPrice']): ?>
@@ -642,6 +675,107 @@ if (isset($_GET['action']) && $_GET['action'] == "add") {
             </div>
         </div>
     </section>
+    
+    <!-- Products by Category Sections -->
+    <?php
+    $categories = mysqli_query($con, "SELECT * FROM category ORDER BY categoryName LIMIT 4");
+    while ($category = mysqli_fetch_array($categories)) {
+        $cat_id = $category['id'];
+        $cat_name = $category['categoryName'];
+        $cat_slug = $category['slug'];
+    ?>
+    <div class="products-section">
+        <div class="container">
+            <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h2 class="section-title"><?php echo htmlentities($cat_name); ?></h2>
+                <a href="/products/<?php echo $cat_slug; ?>/" class="view-all-category" style="color: var(--primary-color); font-weight: 600; text-decoration: none; display: flex; align-items: center;">
+                    View More <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
+                </a>
+            </div>
+            
+            <div class="products-grid">
+                <?php
+                $products = mysqli_query($con, "SELECT p.*, c.slug as cat_slug, s.s_slug as subcat_slug 
+                                              FROM products p 
+                                              JOIN category c ON p.category = c.id 
+                                              JOIN subcategory s ON p.subCategory = s.id 
+                                              WHERE p.category = $cat_id 
+                                              LIMIT 4");
+                while ($row = mysqli_fetch_array($products)) {
+                    // Generate proper product URL with slugs
+                    $product_url = !empty($row['p_slug']) 
+                        ? "/products/{$row['cat_slug']}/{$row['subcat_slug']}/{$row['p_slug']}/" 
+                        : "/product-details.php?pid=" . htmlentities($row['id']);
+                ?>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <a href="<?php echo $product_url; ?>" class="product-image-link">
+                            <img src="admin/productimages/<?php echo htmlentities($row['id']); ?>/<?php echo htmlentities($row['productImage1']); ?>" 
+                                 alt="<?php echo htmlentities($row['productName']); ?>"
+                                 loading="lazy"
+                                 class="product-img">
+                            <div class="image-overlay">
+                                <span class="view-details">View Details</span>
+                            </div>
+                        </a>
+                        
+                        <?php if($row['productPriceBeforeDiscount'] > $row['productPrice']): ?>
+                        <div class="discount-badge">
+                            <span class="discount-percent">
+                                <?php 
+                                $discount = (($row['productPriceBeforeDiscount'] - $row['productPrice']) / $row['productPriceBeforeDiscount']) * 100;
+                                echo round($discount) . '% OFF';
+                                ?>
+                            </span>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="product-info">
+                        <h3 class="product-name">
+                            <a href="<?php echo $product_url; ?>">
+                                <?php echo htmlentities($row['productName']); ?>
+                            </a>
+                        </h3>
+
+                        <div class="product-pricing">
+                            <span class="current-price">Kes. <?php echo number_format($row['productPrice']); ?></span>
+                            <?php if($row['productPriceBeforeDiscount'] > $row['productPrice']): ?>
+                            <span class="original-price">Kes. <?php echo number_format($row['productPriceBeforeDiscount']); ?></span>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="product-availability">
+                            <?php if($row['stockQuantity'] > 0 ): ?>
+                            <span class="in-stock">✓ In Stock</span>
+                            <?php else: ?>
+                            <span class="out-of-stock">✗ Out of Stock</span>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="product-actions">
+                            <?php if($row['productAvailability'] == 'In Stock'): ?>
+                            <a href="/index.php?action=add&id=<?php echo $row['id']; ?>" 
+                               class="add-to-cart-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="9" cy="21" r="1"></circle>
+                                    <circle cx="20" cy="21" r="1"></circle>
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                Add to Cart
+                            </a>
+                            <?php else: ?>
+                            <button class="out-of-stock-btn" disabled>Out of Stock</button>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
     
     <!-- Brands Section -->
     <section class="brands-section">
