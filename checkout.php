@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email_field = isset($_SESSION['id']) ? $user['email'] : $user['email'] . ' (Guest)';
     
     $order_query = mysqli_query($con, "INSERT INTO orders (userId, productId, quantity, paymentMethod, amount, billing_email, billing_phone, billing_first_name, billing_last_name, city, county, postal_code, is_guest) 
-                                      VALUES ('$userId', '$productIdsStr', '$quantitiesStr', '$payment_method', '$amount', '".$user['email']."', '".$user['phone']."', '".$user['firstname']."', '".$user['lastname']."', '".$user['billingCity']."', '".$user['billingState']."', '".$user['billingPincode']."', '".(isset($_SESSION['id']) ? NO : YES)."')");
+                                      VALUES ('$userId', '$productIdsStr', '$quantitiesStr', '$payment_method', '$amount', '".$user['email']."', '".$user['phone']."', '".$user['firstname']."', '".$user['lastname']."', '".$user['billingCity']."', '".$user['billingState']."', '".$user['billingPincode']."', '".(isset($_SESSION['id']) ? 0 : 1)."')");
 
     if ($order_query) {
         $order_id = mysqli_insert_id($con);
