@@ -272,7 +272,7 @@
                                     <i class="fas fa-mobile-alt"></i>
                                 </div>
                                 <div class="media-body">
-                                    <p>(011) 000000000000<br>(011) 000000000000</p>
+                                    <p>(+254) 712474688<br>(+254) 712474688</p>
                                 </div>
                             </li>
                             <li>
