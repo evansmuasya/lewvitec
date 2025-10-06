@@ -367,6 +367,41 @@ if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
             font-size: 20px;
         }
     }
+
+
+    /* Stock Availability Styles */
+.product-availability {
+    margin: 8px 0 12px 0;
+}
+
+.in-stock {
+    color: #38a169;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.out-of-stock {
+    color: #e53e3e;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.out-of-stock-message {
+    background: #fed7d7;
+    color: #c53030;
+    padding: 12px;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-top: 15px;
+    border: 1px solid #feb2b2;
+}
     
     /* Loading animation */
     .product-image {
@@ -469,18 +504,14 @@ if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
                                     <?php endif; ?>
                                 </div>
                                 
-                                <?php if($row['productAvailability']=='In Stock'): ?>
-                                <div class="product-actions">
-                                    <a href="search-result.php?action=add&id=<?php echo $row['id']; ?>" class="btn-add-cart">
-                                        <i class="fa fa-shopping-cart"></i> Add to Cart
-                                    </a>
-                                    <a href="search-result.php?pid=<?php echo htmlentities($row['id'])?>&action=wishlist" class="btn-wishlist" title="Add to Wishlist">
-                                        <i class="fa fa-heart"></i>
-                                    </a>
-                                </div>
+                               <!-- Stock Availability -->
+                               <div class="product-availability">
+                               <?php if($row['stockQuantity'] > 0 ): ?>
+                                <span class="in-stock">✓ In Stock</span>
                                 <?php else: ?>
-                                <div class="out-of-stock">Out of Stock</div>
-                                <?php endif; ?>
+                                  <span class="out-of-stock">✗ Out of Stock</span>
+                                   <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                         <?php 
