@@ -68,8 +68,8 @@ popUpWin = open(URLStr,'popUpWin', 'toolbar=no,location=no,directories=no,status
 	<div class="container">
 		<div class="breadcrumb-inner">
 			<ul class="list-inline list-unstyled">
-				<li><a href="#">Home</a></li>
-				<li class='active'>Shopping Cart</li>
+				<li><a href="index.php">Home</a></li>
+				<li class='active'>Order Details</li>
 			</ul>
 		</div><!-- /.breadcrumb-inner -->
 	</div><!-- /.container -->
@@ -81,67 +81,194 @@ popUpWin = open(URLStr,'popUpWin', 'toolbar=no,location=no,directories=no,status
 			<div class="shopping-cart">
 				<div class="col-md-12 col-sm-12 shopping-cart-table ">
 	<div class="table-responsive">
-<form name="cart" method="post">	
+<form name="orderDetails" method="post">	
+<?php
+// Check if form is submitted
+if(isset($_POST['orderid']) && isset($_POST['email'])) {
+    $orderid = $_POST['orderid'];
+    $email = $_POST['email'];
+    
+    // Validate order exists and belongs to the email
+    $ret = mysqli_query($con, "SELECT o.*, u.email, u.firstName, u.lastName 
+                              FROM orders o 
+                              JOIN users u ON o.userId = u.id 
+                              WHERE o.id = '$orderid' AND u.email = '$email'");
+    $num = mysqli_num_rows($ret);
+    
+    if($num > 0) {
+        $order_data = mysqli_fetch_array($ret);
+        ?>
+        
+        <!-- Order Summary -->
+        <div class="order-summary" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+            <h3>Order Summary</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Order ID:</strong> #<?php echo htmlentities($order_data['id']); ?></p>
+                    <p><strong>Order Date:</strong> <?php echo htmlentities($order_data['orderDate']); ?></p>
+                    <p><strong>Customer:</strong> <?php echo htmlentities($order_data['firstName'] . ' ' . $order_data['lastName']); ?></p>
+                    <p><strong>Email:</strong> <?php echo htmlentities($order_data['email']); ?></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Payment Method:</strong> <?php echo htmlentities($order_data['paymentMethod']); ?></p>
+                    <p><strong>Order Status:</strong> 
+                        <span class="badge badge-<?php 
+                            switch($order_data['orderStatus']) {
+                                case 'COMPLETED': echo 'success'; break;
+                                case 'Delivered': echo 'success'; break;
+                                case 'Pending': echo 'warning'; break;
+                                case 'FAILED': echo 'danger'; break;
+                                default: echo 'secondary';
+                            }
+                        ?>">
+                            <?php echo htmlentities($order_data['orderStatus'] ?: 'Pending'); ?>
+                        </span>
+                    </p>
+                    <p><strong>Total Amount:</strong> Kes. <?php echo number_format($order_data['amount'], 2); ?></p>
+                    <?php if(!empty($order_data['confirmation_code'])): ?>
+                    <p><strong>Confirmation Code:</strong> <?php echo htmlentities($order_data['confirmation_code']); ?></p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
 
+        <!-- Order Items -->
+        <h3>Order Items</h3>
 		<table class="table table-bordered">
 			<thead>
 				<tr>
 					<th class="cart-romove item">#</th>
 					<th class="cart-description item">Image</th>
 					<th class="cart-product-name item">Product Name</th>
-			
 					<th class="cart-qty item">Quantity</th>
 					<th class="cart-sub-total item">Price Per unit</th>
-					<th class="cart-total item">Grandtotal</th>
-					<th class="cart-total item">Payment Method</th>
-					<th class="cart-description item">Order Date</th>
+					<th class="cart-total item">Subtotal</th>
 					<th class="cart-total last-item">Action</th>
 				</tr>
 			</thead><!-- /thead -->
 			
 			<tbody>
-<?php 
-$orderid=$_POST['orderid'];
-$email=$_POST['email'];
-$ret = mysqli_query($con,"select t.email,t.id from (select usr.email,odrs.id from users as usr join orders as odrs on usr.id=odrs.userId) as t where  t.email='$email' and (t.id='$orderid')");
-$num=mysqli_num_rows($ret);
-if($num>0)
-{
-$query=mysqli_query($con,"select products.productImage1 as pimg1,products.productName as pname,orders.productId as opid,orders.quantity as qty,products.productPrice as pprice,orders.paymentMethod as paym,orders.orderDate as odate,orders.id as orderid from orders join products on orders.productId=products.id where orders.id='$orderid' and orders.paymentMethod is not null");
-$cnt=1;
-while($row=mysqli_fetch_array($query))
-{
+<?php
+        // Get order items
+        // Handle different productId formats in the orders table
+        $productIds = array();
+        
+        if(!empty($order_data['productId'])) {
+            // Check if productId contains serialized data
+            if(strpos($order_data['productId'], 'a:') === 0) {
+                // It's serialized data
+                $cart_data = unserialize($order_data['productId']);
+                if(is_array($cart_data)) {
+                    $productIds = array_keys($cart_data);
+                }
+            } else if(strpos($order_data['productId'], ',') !== false) {
+                // It's comma-separated product IDs
+                $productIds = explode(',', $order_data['productId']);
+            } else {
+                // Single product ID
+                $productIds = array($order_data['productId']);
+            }
+        }
+        
+        $cnt = 1;
+        $total_amount = 0;
+        
+        foreach($productIds as $pid) {
+            if(empty($pid)) continue;
+            
+            // Get product details
+            $product_query = mysqli_query($con, "SELECT * FROM products WHERE id = '$pid'");
+            if(mysqli_num_rows($product_query) > 0) {
+                $product = mysqli_fetch_array($product_query);
+                
+                // Get quantity - this is complex due to data structure variations
+                $quantity = 1;
+                if(strpos($order_data['productId'], 'a:') === 0) {
+                    $cart_data = unserialize($order_data['productId']);
+                    if(isset($cart_data[$pid]['quantity'])) {
+                        $quantity = $cart_data[$pid]['quantity'];
+                    }
+                } else {
+                    $quantity = $order_data['quantity'];
+                }
+                
+                $subtotal = $product['productPrice'] * $quantity;
+                $total_amount += $subtotal;
 ?>
 				<tr>
 					<td><?php echo $cnt;?></td>
 					<td class="cart-image">
-						<a class="entry-thumbnail" href="detail.html">
-						    <img src="admin/productimages/<?php echo $row['pname'];?>/<?php echo $row['pimg1'];?>" alt="" width="84" height="146">
+						<a class="entry-thumbnail" href="product-details.php?pid=<?php echo $product['id'];?>">
+						    <img src="admin/productimages/<?php echo $product['id'];?>/<?php echo $product['productImage1'];?>" alt="<?php echo htmlentities($product['productName']);?>" width="84" height="84" style="object-fit: cover;">
 						</a>
 					</td>
 					<td class="cart-product-name-info">
-						<h4 class='cart-product-description'><a href="product-details.php?pid=<?php echo $row['opid'];?>">
-						<?php echo $row['pname'];?></a></h4>
-						
-						
+						<h4 class='cart-product-description'>
+                            <a href="product-details.php?pid=<?php echo $product['id'];?>">
+                                <?php echo htmlentities($product['productName']);?>
+                            </a>
+                        </h4>
 					</td>
 					<td class="cart-product-quantity">
-						<?php echo $qty=$row['qty']; ?>   
+						<?php echo $quantity; ?>   
 		            </td>
-					<td class="cart-product-sub-total"><?php echo $price=$row['pprice']; ?>  </td>
-					<td class="cart-product-grand-total"><?php echo $qty*$price;?></td>
-					<td class="cart-product-sub-total"><?php echo $row['paym']; ?>  </td>
-					<td class="cart-product-sub-total"><?php echo $row['odate']; ?>  </td>
-					
+					<td class="cart-product-sub-total">Kes. <?php echo number_format($product['productPrice'], 2); ?>  </td>
+					<td class="cart-product-grand-total">Kes. <?php echo number_format($subtotal, 2); ?></td>
 					<td>
- <a href="javascript:void(0);" onClick="popUpWindow('track-order.php?oid=<?php echo htmlentities($row['orderid']);?>');" title="Track order">
-					Track</td>
+                        <a href="javascript:void(0);" onClick="popUpWindow('track-order.php?oid=<?php echo htmlentities($order_data['id']);?>');" title="Track order" class="btn btn-primary btn-sm">
+                            Track Order
+                        </a>
+                    </td>
 				</tr>
-<?php $cnt=$cnt+1;} } else { ?>
-				<tr><td colspan="8">Either order id or  Registered email id is invalid</td></tr>
-				<?php } ?>
+<?php 
+                $cnt++;
+            }
+        }
+        
+        // Display total
+        if($cnt > 1) {
+?>
+                <tr>
+                    <td colspan="5" class="text-right"><strong>Total Amount:</strong></td>
+                    <td colspan="2"><strong>Kes. <?php echo number_format($total_amount, 2); ?></strong></td>
+                </tr>
+<?php
+        } else {
+?>
+                <tr>
+                    <td colspan="7" class="text-center">No products found in this order</td>
+                </tr>
+<?php
+        }
+?>
 			</tbody><!-- /tbody -->
 		</table><!-- /table -->
+<?php
+    } else {
+        echo '<div class="alert alert-danger">Invalid order ID or email address. Please check your details and try again.</div>';
+    }
+} else {
+    // Show search form if no data submitted
+?>
+        <div class="order-search-form" style="max-width: 500px; margin: 0 auto;">
+            <h3>Find Your Order</h3>
+            <p>Enter your order ID and email address to view order details.</p>
+            
+            <div class="form-group">
+                <label for="orderid">Order ID *</label>
+                <input type="text" class="form-control" id="orderid" name="orderid" required placeholder="Enter your order ID">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email address">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">View Order Details</button>
+        </div>
+<?php
+}
+?>
 		
 	</div>
 </div>
