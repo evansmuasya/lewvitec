@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Disallow admin or system areas
+Disallow: /admin/
+Disallow: /includes/
+Disallow: /tmp/
+
+# Your sitemap location
+Sitemap: https://www.sunvolt.co.ke/sitemap.xml
