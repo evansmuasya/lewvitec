@@ -538,7 +538,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     
     <footer>
-        <p>&copy; <?php echo date('Y'); ?> ShopEase. All rights reserved.</p>
+        <p>&copy; <?php echo date('Y'); ?> Lewvitec. All rights reserved.</p>
     </footer>
 
     <script>
