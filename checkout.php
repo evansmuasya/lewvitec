@@ -419,7 +419,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <header>
         <div class="header-content">
-            <div class="logo">ShopEase</div>
+            <div class="logo">Lewvitec</div>
             <div class="user-info">
                 <i class="fas fa-user"></i> 
                 <?php 
