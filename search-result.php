@@ -11,23 +11,46 @@ if(isset($_POST['product'])) {
     $find = "%" . trim($_GET['q']) . "%";
 }
 
-// Add to cart functionality
-if(isset($_GET['action']) && $_GET['action']=="add"){
-    $id=intval($_GET['id']);
-    if(isset($_SESSION['cart'][$id])){
-        $_SESSION['cart'][$id]['quantity']++;
-    }else{
-        $sql_p="SELECT * FROM products WHERE id={$id}";
-        $query_p=mysqli_query($con,$sql_p);
-        if(mysqli_num_rows($query_p)!=0){
-            $row_p=mysqli_fetch_array($query_p);
-            $_SESSION['cart'][$row_p['id']]=array("quantity" => 1, "price" => $row_p['productPrice']);
-            echo "<script>alert('Product has been added to the cart')</script>";
-            echo "<script type='text/javascript'> document.location ='my-cart.php'; </script>";
-        }else{
-            $message="Product ID is invalid";
-        }
+// ==============================
+// Add to Cart (via product slug) - Same as index.php
+// ==============================
+if (isset($_GET['action']) && $_GET['action'] == "add") {
+    // Prefer p_slug if present, otherwise fall back to numeric id (for backward compatibility)
+    $p_slug = $_GET['p_slug'] ?? '';
+    $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+    if (!empty($p_slug)) {
+        // Find product by slug
+        $sql_p = "SELECT * FROM products WHERE p_slug = ?";
+        $stmt = $con->prepare($sql_p);
+        $stmt->bind_param("s", $p_slug);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row_p = $result->fetch_assoc();
+    } elseif ($id > 0) {
+        // Fallback: Find product by ID (legacy support)
+        $sql_p = "SELECT * FROM products WHERE id = ?";
+        $stmt = $con->prepare($sql_p);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row_p = $result->fetch_assoc();
     }
+
+    if (!empty($row_p)) {
+        $pid = $row_p['id'];
+        if (isset($_SESSION['cart'][$pid])) {
+            $_SESSION['cart'][$pid]['quantity']++;
+        } else {
+            $_SESSION['cart'][$pid] = array("quantity" => 1, "price" => $row_p['productPrice']);
+        }
+        echo "<script>alert('Product has been added to the cart');</script>";
+    } else {
+        echo "<script>alert('Invalid product');</script>";
+    }
+
+    echo "<script type='text/javascript'> document.location ='my-cart.php'; </script>";
+    exit();
 }
 
 // Wishlist functionality
@@ -55,12 +78,7 @@ if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico">
@@ -89,7 +107,7 @@ if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
         margin-top: 20px;
     }
     
-    .category-product {
+    .products-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 25px;
@@ -153,7 +171,7 @@ if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
         color: #667eea;
     }
     
-    .product-price {
+    .product-pricing {
         display: flex;
         align-items: center;
         gap: 12px;
@@ -172,67 +190,72 @@ if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
         text-decoration: line-through;
     }
     
-    .product-actions {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
+    .product-availability {
+        margin-bottom: 12px;
     }
     
-    .btn-add-cart {
-        flex: 1;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        padding: 12px;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
-    
-    .btn-add-cart:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        color: white;
-    }
-    
-    .btn-wishlist {
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
-        color: #666;
-        width: 45px;
-        height: 45px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-    }
-    
-    .btn-wishlist:hover {
-        background: #fff5f5;
-        color: #e53e3e;
-        border-color: #fed7d7;
-        transform: translateY(-2px);
+    .in-stock {
+        color: #48bb78;
+        font-size: 14px;
+        font-weight: 500;
     }
     
     .out-of-stock {
-        background: #fed7d7;
-        color: #c53030;
-        padding: 12px;
-        text-align: center;
-        border-radius: 8px;
-        font-weight: 600;
+        color: #ef4444;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .product-actions {
         margin-top: 15px;
-        border: 1px solid #feb2b2;
+    }
+    
+    .add-to-cart-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: 100%;
+        padding: 10px 15px;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    
+    .add-to-cart-btn:hover {
+        background: #5a67d8;
+        transform: translateY(-1px);
+    }
+    
+    .out-of-stock-btn {
+        width: 100%;
+        padding: 10px 15px;
+        background: #e2e8f0;
+        color: #718096;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: not-allowed;
+        font-size: 14px;
+    }
+    
+    .discount-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #e53e3e;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        z-index: 2;
     }
     
     .no-results {
@@ -283,31 +306,8 @@ if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
     }
     
     /* Responsive Design */
-    @media (max-width: 1200px) {
-        .category-product {
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
-        }
-    }
-    
-    @media (max-width: 992px) {
-        .category-product {
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 18px;
-            padding: 0 10px;
-        }
-        
-        .search-results-header {
-            padding: 25px 0;
-        }
-        
-        .search-query-display {
-            font-size: 24px;
-        }
-    }
-    
     @media (max-width: 768px) {
-        .category-product {
+        .products-grid {
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 15px;
         }
@@ -335,7 +335,7 @@ if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
     }
     
     @media (max-width: 576px) {
-        .category-product {
+        .products-grid {
             grid-template-columns: 1fr;
             gap: 20px;
             padding: 0;
@@ -345,89 +345,6 @@ if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
             padding: 20px 0;
             margin-bottom: 20px;
         }
-        
-        .product-actions {
-            flex-direction: column;
-        }
-        
-        .btn-wishlist {
-            width: 100%;
-            height: 45px;
-        }
-        
-        .no-results {
-            padding: 60px 15px;
-        }
-        
-        .no-results-icon {
-            font-size: 60px;
-        }
-        
-        .no-results h3 {
-            font-size: 20px;
-        }
-    }
-
-
-    /* Stock Availability Styles */
-.product-availability {
-    margin: 8px 0 12px 0;
-}
-
-.in-stock {
-    color: #38a169;
-    font-weight: 600;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.out-of-stock {
-    color: #e53e3e;
-    font-weight: 600;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.out-of-stock-message {
-    background: #fed7d7;
-    color: #c53030;
-    padding: 12px;
-    text-align: center;
-    border-radius: 8px;
-    font-weight: 600;
-    margin-top: 15px;
-    border: 1px solid #feb2b2;
-}
-    
-    /* Loading animation */
-    .product-image {
-        background: linear-gradient(110deg, #f5f5f5 8%, #eee 18%, #f5f5f5 33%);
-        background-size: 200% 100%;
-        animation: 1.5s shine linear infinite;
-    }
-    
-    @keyframes shine {
-        to {
-            background-position-x: -200%;
-        }
-    }
-    
-    /* Badge for discounts */
-    .discount-badge {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: #e53e3e;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        z-index: 2;
     }
     </style>
 </head>
@@ -451,7 +368,11 @@ if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
                     <?php 
                     $searchTerm = trim(str_replace('%', '', $find));
                     if(!empty($searchTerm)): 
-                        $ret=mysqli_query($con,"select * from products where productName like '$find'");
+                        $ret=mysqli_query($con,"SELECT p.*, c.slug as cat_slug, s.s_slug as subcat_slug 
+                                              FROM products p 
+                                              JOIN category c ON p.category = c.id 
+                                              JOIN subcategory s ON p.subCategory = s.id 
+                                              WHERE p.productName LIKE '$find'");
                         $num=mysqli_num_rows($ret);
                     ?>
                     <div class="results-count">
@@ -466,55 +387,84 @@ if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
             <!-- Main Content -->
             <div class='col-md-12'>
                 <div class="search-result-container">
-                    <div class="category-product inner-top-vs">
+                    <div class="products-grid">
                         <?php
                         if(!empty($searchTerm)) {
                             if($num > 0) {
                                 while ($row=mysqli_fetch_array($ret)): 
-                                    $discount = 0;
-                                    if($row['productPriceBeforeDiscount'] > $row['productPrice']) {
-                                        $discount = (($row['productPriceBeforeDiscount'] - $row['productPrice']) / $row['productPriceBeforeDiscount']) * 100;
-                                    }
-                        ?>
-                        <div class="product-card">
-                            <div class="product-image">
-                                <?php if($discount > 0): ?>
-                                <div class="discount-badge">-<?php echo round($discount); ?>%</div>
-                                <?php endif; ?>
-                                <div class="image">
-                                    <a href="product-details.php?pid=<?php echo htmlentities($row['id']);?>">
-                                        <img src="admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage1']);?>" 
-                                             alt="<?php echo htmlentities($row['productName']);?>" 
-                                             onerror="this.src='assets/images/placeholder-product.jpg'">
-                                    </a>
+                                    // Generate proper product URL with slugs (same as index.php)
+                                    $product_url = !empty($row['p_slug']) 
+                                        ? "/products/{$row['cat_slug']}/{$row['subcat_slug']}/{$row['p_slug']}/" 
+                                        : "/product-details.php?pid=" . htmlentities($row['id']);
+                                ?>
+                                <div class="product-card">
+                                    <div class="product-image">
+                                        <?php if($row['productPriceBeforeDiscount'] > $row['productPrice']): 
+                                            $discount = (($row['productPriceBeforeDiscount'] - $row['productPrice']) / $row['productPriceBeforeDiscount']) * 100;
+                                        ?>
+                                        <div class="discount-badge">-<?php echo round($discount); ?>%</div>
+                                        <?php endif; ?>
+                                        
+                                        <a href="<?php echo $product_url; ?>" class="product-image-link">
+                                            <img src="admin/productimages/<?php echo htmlentities($row['id']);?>/<?php echo htmlentities($row['productImage1']);?>" 
+                                                 alt="<?php echo htmlentities($row['productName']);?>" 
+                                                 onerror="this.src='assets/images/placeholder-product.jpg'">
+                                        </a>
+                                    </div>
+                                    
+                                    <div class="product-info">
+                                        <h3 class="product-name">
+                                            <a href="<?php echo $product_url; ?>">
+                                                <?php echo htmlentities($row['productName']);?>
+                                            </a>
+                                        </h3>
+                                        
+                                        <!-- Stock Availability -->
+                                        <div class="product-availability">
+                                            <?php if($row['stockQuantity'] > 0 ): ?>
+                                            <span class="in-stock">✓ In Stock</span>
+                                            <?php else: ?>
+                                            <span class="out-of-stock">✗ Out of Stock</span>
+                                            <?php endif; ?>
+                                        </div>
+                                        
+                                        <div class="product-pricing">
+                                            <span class="current-price">Kes. <?php echo number_format($row['productPrice'], 2);?></span>
+                                            <?php if($row['productPriceBeforeDiscount'] > $row['productPrice']): ?>
+                                            <span class="original-price">Kes. <?php echo number_format($row['productPriceBeforeDiscount'], 2);?></span>
+                                            <?php endif; ?>
+                                        </div>
+                                        
+                                        <?php if($row['stockQuantity'] > 0): ?>
+                                        <div class="product-actions">
+                                            <?php if(!empty($row['p_slug'])): ?>
+                                            <a href="search-result.php?action=add&p_slug=<?php echo $row['p_slug']; ?>" class="add-to-cart-btn">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <circle cx="9" cy="21" r="1"></circle>
+                                                    <circle cx="20" cy="21" r="1"></circle>
+                                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                                </svg>
+                                                Add to Cart
+                                            </a>
+                                            <?php else: ?>
+                                            <a href="search-result.php?action=add&id=<?php echo $row['id']; ?>" class="add-to-cart-btn">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <circle cx="9" cy="21" r="1"></circle>
+                                                    <circle cx="20" cy="21" r="1"></circle>
+                                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                                </svg>
+                                                Add to Cart
+                                            </a>
+                                            <?php endif; ?>
+                                        </div>
+                                        <?php else: ?>
+                                        <div class="product-actions">
+                                            <button class="out-of-stock-btn" disabled>Out of Stock</button>
+                                        </div>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="product-info">
-                                <h3 class="product-name">
-                                    <a href="product-details.php?pid=<?php echo htmlentities($row['id']);?>">
-                                        <?php echo htmlentities($row['productName']);?>
-                                    </a>
-                                </h3>
-                                
-                                <div class="product-price">
-                                    <span class="current-price">Kes. <?php echo number_format($row['productPrice'], 2);?></span>
-                                    <?php if($row['productPriceBeforeDiscount'] > $row['productPrice']): ?>
-                                    <span class="original-price">Kes. <?php echo number_format($row['productPriceBeforeDiscount'], 2);?></span>
-                                    <?php endif; ?>
-                                </div>
-                                
-                               <!-- Stock Availability -->
-                               <div class="product-availability">
-                               <?php if($row['stockQuantity'] > 0 ): ?>
-                                <span class="in-stock">✓ In Stock</span>
-                                <?php else: ?>
-                                  <span class="out-of-stock">✗ Out of Stock</span>
-                                   <?php endif; ?>
-                                </div>
-                            </div>
-                        </div>
-                        <?php 
+                                <?php 
                                 endwhile;
                             } else {
                         ?>
@@ -580,26 +530,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Add smooth animations for product cards
-    const productCards = document.querySelectorAll('.product-card');
-    productCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transition = 'all 0.4s ease';
-        });
-    });
-    
     // Add to cart animation
-    const addToCartButtons = document.querySelectorAll('.btn-add-cart');
+    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
     addToCartButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             if (!this.classList.contains('disabled')) {
+                const originalHTML = this.innerHTML;
                 this.classList.add('disabled');
                 this.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Adding...';
                 
                 setTimeout(() => {
                     this.innerHTML = '<i class="fa fa-check"></i> Added!';
                     setTimeout(() => {
-                        this.innerHTML = '<i class="fa fa-shopping-cart"></i> Add to Cart';
+                        this.innerHTML = originalHTML;
                         this.classList.remove('disabled');
                     }, 1000);
                 }, 500);
