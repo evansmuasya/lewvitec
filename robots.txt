@@ -1,0 +1,44 @@
+# ================================
+# Lewvitec Sounds Robots.txt
+# Guide: Controls what search engines can crawl and index
+# ================================
+
+# Allow all major crawlers to index public pages
+User-agent: *
+Allow: /
+
+# Disallow crawling of admin and system folders
+Disallow: /admin/
+Disallow: /includes/
+Disallow: /config/
+Disallow: /tmp/
+Disallow: /cgi-bin/
+
+# Disallow common backend or sensitive PHP files
+Disallow: /login.php
+Disallow: /register.php
+Disallow: /checkout.php
+Disallow: /cart.php
+Disallow: /order-history.php
+Disallow: /process-payment.php
+
+# Optional: Prevent crawling of search results or duplicate content
+Disallow: /search/
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?page=
+
+# Allow all your main content folders
+Allow: /category.php
+Allow: /sub-category.php
+Allow: /products-details.php
+Allow: /admin/productimages
+Allow: /assets/
+Allow: /uploads/
+
+# Sitemap location (very important)
+Sitemap: https://www.lewvitec.co.ke/sitemap.xml
+
+# ================================
+# End of Robots.txt
+# ================================
