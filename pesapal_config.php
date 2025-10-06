@@ -5,7 +5,7 @@ define('PESAPAL_ENV', 'live'); // change to 'live' when ready
 // Consumer keys
 define('PESAPAL_CONSUMER_KEY', 'bp7DTgEtBDWUrOLgOAnWJOQBslXjIxuS');
 define('PESAPAL_CONSUMER_SECRET', 'oBXP6QrQ/SqywS42vpcAISRAzmQ=');
-define('PESAPAL_IPN_ID', 'da8fce76-8478-4371-adad-db3eaea6d38c');
+define('PESAPAL_IPN_ID', '876071dd-651d-4acd-b0e2-db3eac3020a3');
 
 // Base URLs
 define('PESAPAL_BASE_URL_SANDBOX', 'https://cybqa.pesapal.com/pesapalv3');
