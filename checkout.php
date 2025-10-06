@@ -3,38 +3,71 @@ session_start();
 include('includes/config.php');
 include('includes/pesapal-config.php');
 
-// Check if user is logged in
-if (!isset($_SESSION['id'])) {
-    header("Location: login.php");
-    exit();
-}
-
-// Get user information
-$user_id = $_SESSION['id'];
-$user_query = mysqli_query($con, "SELECT * FROM users WHERE id='$user_id'");
-$user = mysqli_fetch_array($user_query);
-
-// Check if user has complete billing information
-$required_fields = ['firstname', 'lastname', 'email', 'phone', 'billingAddress', 'billingCity', 'billingState', 'billingPincode'];
-$missing_fields = [];
-foreach ($required_fields as $field) {
-    if (empty($user[$field])) {
-        $missing_fields[] = $field;
-    }
-}
-
-if (!empty($missing_fields)) {
-    $_SESSION['error'] = "Please complete your billing information before checkout. Missing: " . implode(', ', $missing_fields);
-    header("Location: my-cart.php");
-    exit();
-}
-
-// Get cart from session
+// Check if user has items in cart
 $cart = $_SESSION['cart'] ?? [];
 if (empty($cart)) {
     $_SESSION['error'] = "Your cart is empty.";
     header("Location: my-cart.php");
     exit();
+}
+
+// Get user information based on login status
+if (isset($_SESSION['id'])) {
+    // Logged in user
+    $user_id = $_SESSION['id'];
+    $user_query = mysqli_query($con, "SELECT * FROM users WHERE id='$user_id'");
+    $user = mysqli_fetch_array($user_query);
+    
+    // Check if user has complete billing information
+    $required_fields = ['firstname', 'lastname', 'email', 'phone', 'billingAddress', 'billingCity', 'billingState', 'billingPincode'];
+    $missing_fields = [];
+    foreach ($required_fields as $field) {
+        if (empty($user[$field])) {
+            $missing_fields[] = $field;
+        }
+    }
+
+    if (!empty($missing_fields)) {
+        $_SESSION['error'] = "Please complete your billing information before checkout. Missing: " . implode(', ', $missing_fields);
+        header("Location: my-cart.php");
+        exit();
+    }
+} else {
+    // Guest user - get billing info from session
+    if (!isset($_SESSION['guest_billing'])) {
+        $_SESSION['error'] = "Please complete your billing information before checkout.";
+        header("Location: my-cart.php");
+        exit();
+    }
+    
+    $guest_billing = $_SESSION['guest_billing'];
+    
+    // Check if guest has complete billing information
+    $required_fields = ['first_name', 'last_name', 'email', 'phone', 'address', 'city', 'state', 'pincode'];
+    $missing_fields = [];
+    foreach ($required_fields as $field) {
+        if (empty($guest_billing[$field])) {
+            $missing_fields[] = $field;
+        }
+    }
+
+    if (!empty($missing_fields)) {
+        $_SESSION['error'] = "Please complete your billing information before checkout. Missing: " . implode(', ', $missing_fields);
+        header("Location: my-cart.php");
+        exit();
+    }
+    
+    // Create user array with guest billing info for consistent usage
+    $user = [
+        'firstname' => $guest_billing['first_name'],
+        'lastname' => $guest_billing['last_name'],
+        'email' => $guest_billing['email'],
+        'phone' => $guest_billing['phone'],
+        'billingAddress' => $guest_billing['address'],
+        'billingCity' => $guest_billing['city'],
+        'billingState' => $guest_billing['state'],
+        'billingPincode' => $guest_billing['pincode']
+    ];
 }
 
 // Calculate total based on cart structure
@@ -67,7 +100,7 @@ $_SESSION['cart_items'] = $cart_items;
 
 // Process checkout when form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userId = $_SESSION['id'];
+    $userId = isset($_SESSION['id']) ? $_SESSION['id'] : 0; // 0 for guest users
     $amount = $total;
     $payment_method = 'pesapal';
     
@@ -78,8 +111,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $productIdsStr = implode(',', $productIds);
     $quantitiesStr = implode(',', $quantities);
     
-    $order_query = mysqli_query($con, "INSERT INTO orders (userId, productId, quantity, paymentMethod, amount, billing_email, billing_phone, billing_first_name, billing_last_name, city, county, postal_code) 
-                                      VALUES ('$userId', '$productIdsStr', '$quantitiesStr', '$payment_method', '$amount', '".$user['email']."', '".$user['phone']."', '".$user['firstname']."', '".$user['lastname']."', '".$user['billingCity']."', '".$user['billingState']."', '".$user['billingPincode']."')");
+    // For guest users, store guest email in a separate field
+    $email_field = isset($_SESSION['id']) ? $user['email'] : $user['email'] . ' (Guest)';
+    
+    $order_query = mysqli_query($con, "INSERT INTO orders (userId, productId, quantity, paymentMethod, amount, billing_email, billing_phone, billing_first_name, billing_last_name, city, county, postal_code, is_guest) 
+                                      VALUES ('$userId', '$productIdsStr', '$quantitiesStr', '$payment_method', '$amount', '".$user['email']."', '".$user['phone']."', '".$user['firstname']."', '".$user['lastname']."', '".$user['billingCity']."', '".$user['billingState']."', '".$user['billingPincode']."', '".(isset($_SESSION['id']) ? 0 : 1)."')");
 
     if ($order_query) {
         $order_id = mysqli_insert_id($con);
@@ -99,6 +135,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'state' => $user['billingState'],
             'postal_code' => $user['billingPincode']
         ];
+        
+        // Store user type for later reference
+        $_SESSION['user_type'] = isset($_SESSION['id']) ? 'registered' : 'guest';
         
         // Redirect to PesaPal payment request
         header("Location: pesapal_request.php");
@@ -364,6 +403,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom: 20px;
             border-left: 4px solid #c62828;
         }
+        
+        .user-type-badge {
+            display: inline-block;
+            background: #ffc107;
+            color: #856404;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -372,7 +422,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="logo">ShopEase</div>
             <div class="user-info">
                 <i class="fas fa-user"></i> 
-                <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>
+                <?php 
+                if (isset($_SESSION['username'])) {
+                    echo htmlspecialchars($_SESSION['username']);
+                } else {
+                    echo 'Guest';
+                    echo '<span class="user-type-badge">Guest Checkout</span>';
+                }
+                ?>
             </div>
         </div>
     </header>
@@ -382,7 +439,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="index.php">Home</a> &gt; <a href="my-cart.php">Cart</a> &gt; Checkout
         </div>
         
-        <h1>Checkout</h1>
+        <h1>Checkout <?php echo !isset($_SESSION['id']) ? '<span class="user-type-badge">Guest Checkout</span>' : ''; ?></h1>
         
         <?php if (isset($_SESSION['error'])): ?>
             <div class="error-message">
@@ -442,6 +499,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <p><strong>State:</strong> <?php echo htmlspecialchars($user['billingState']); ?></p>
                         <p><strong>Postal Code:</strong> <?php echo htmlspecialchars($user['billingPincode']); ?></p>
                         <p><strong>Country:</strong> Kenya</p>
+                        <?php if (!isset($_SESSION['id'])): ?>
+                        <p><strong>Account Type:</strong> <span class="user-type-badge">Guest Checkout</span></p>
+                        <?php endif; ?>
                     </div>
                     <p class="text-muted"><i class="fas fa-info-circle"></i> This information will be used for PesaPal payment processing.</p>
                 </div>
