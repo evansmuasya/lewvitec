@@ -144,16 +144,12 @@ if ($success) {
     header("Location: order_pending.php?order_id=" . $order_id);
     exit;
 }
-
 /**
- * Send email notifications for successful order using PHP mail() function
+ * Send email notifications for successful order using PHPMailer
  */
 function sendOrderEmails($order_id, $customer_email, $customer_name, $amount, $tracking_id, $confirmation_code) {
-    // Email headers
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    $headers .= "From: Lewvitec Sales <sales@lewvitec.com>" . "\r\n";
-    $headers .= "Reply-To: sales@lewvitec.co.ke" . "\r\n";
+    // Include PHPMailer configuration
+    include('includes/phpmailer_config.php');
     
     // Email to customer
     $customer_subject = "Order Confirmation - Your Order #$order_id has been confirmed";
@@ -192,7 +188,7 @@ function sendOrderEmails($order_id, $customer_email, $customer_name, $amount, $t
             
             <div class='footer'>
                 <p>Best regards,<br><strong>Lewvitec Team</strong></p>
-                <p>Email: sales@lewvitec.com</p>
+                <p>Email: sales@lewvitec.co.ke<br>Website: www.lewvitec.co.ke</p>
             </div>
         </div>
     </body>
@@ -232,6 +228,10 @@ function sendOrderEmails($order_id, $customer_email, $customer_name, $amount, $t
             </div>
             
             <p>Please process this order promptly.</p>
+            
+            <div class='footer'>
+                <p>This email was automatically generated from lewvitec.co.ke</p>
+            </div>
         </div>
     </body>
     </html>
@@ -239,20 +239,21 @@ function sendOrderEmails($order_id, $customer_email, $customer_name, $amount, $t
     
     // Send email to customer
     if (!empty($customer_email)) {
-        $customer_sent = mail($customer_email, $customer_subject, $customer_message, $headers);
+        $customer_sent = sendPHPMailerEmail($customer_email, $customer_subject, $customer_message, $customer_name);
         if (!$customer_sent) {
             file_put_contents('pesapal_callback_debug.log', "Failed to send email to customer: $customer_email" . PHP_EOL, FILE_APPEND);
         } else {
             file_put_contents('pesapal_callback_debug.log', "Successfully sent email to customer: $customer_email" . PHP_EOL, FILE_APPEND);
         }
+    } else {
+        file_put_contents('pesapal_callback_debug.log', "No customer email found for order #$order_id" . PHP_EOL, FILE_APPEND);
     }
     
     // Send email to admin
-    $admin_sent = mail('lewvitec@gmail.com', $admin_subject, $admin_message, $headers);
+    $admin_sent = sendPHPMailerEmail('lewvitec@gmail.com', $admin_subject, $admin_message, 'Lewvitec Admin');
     if (!$admin_sent) {
         file_put_contents('pesapal_callback_debug.log', "Failed to send email to admin" . PHP_EOL, FILE_APPEND);
     } else {
         file_put_contents('pesapal_callback_debug.log', "Successfully sent email to admin" . PHP_EOL, FILE_APPEND);
     }
 }
-?>
