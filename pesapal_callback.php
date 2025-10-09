@@ -64,8 +64,8 @@ $order_row    = mysqli_fetch_assoc($order_id_res);
 $order_id     = $order_row['id'] ?? null;
 $product_id   = $order_row['productId'] ?? null;
 $quantity     = (int)($order_row['quantity'] ?? 0);
-$customer_email = $order_row['billing_email'] ?? '';
-$customer_name = $order_row['billing_first_name'] ?? 'Customer';
+$customer_email = $order_row['email'] ?? '';
+$customer_name = $order_row['customerName'] ?? 'Customer';
 
 // === STEP 6: Normalize status ===
 $success = ($order_status === "COMPLETED" || $order_status === "SUCCESS" || 
@@ -113,7 +113,7 @@ if ($success && $product_id && $quantity > 0) {
     $updateProduct = mysqli_prepare($con, "UPDATE products SET stock = GREATEST(stock - ?, 0) WHERE id = ?");
     if ($updateProduct) {
         mysqli_stmt_bind_param($updateProduct, "ii", $quantity, $product_id);
-        if (!mysqli_stmt_execute($updateProduct)) {
+        if (!mys_stmt_execute($updateProduct)) {
             file_put_contents('pesapal_callback_debug.log', "Stock Update Error: " . mysqli_stmt_error($updateProduct) . PHP_EOL, FILE_APPEND);
         }
         mysqli_stmt_close($updateProduct);
@@ -146,30 +146,55 @@ if ($success) {
 }
 
 /**
- * Send email notifications for successful order
+ * Send email notifications for successful order using PHP mail() function
  */
 function sendOrderEmails($order_id, $customer_email, $customer_name, $amount, $tracking_id, $confirmation_code) {
+    // Email headers
+    $headers = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    $headers .= "From: Lewvitec Sales <sales@lewvitec.com>" . "\r\n";
+    $headers .= "Reply-To: sales@lewvitec.com" . "\r\n";
+    
     // Email to customer
     $customer_subject = "Order Confirmation - Your Order #$order_id has been confirmed";
     $customer_message = "
     <html>
     <head>
         <title>Order Confirmation</title>
+        <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #3e63c9; color: white; padding: 20px; text-align: center; }
+            .content { background: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0; }
+            .footer { text-align: center; color: #666; font-size: 14px; }
+            .order-detail { margin-bottom: 10px; }
+            .order-detail strong { display: inline-block; width: 150px; }
+        </style>
     </head>
     <body>
-        <h2>Thank you for your order, $customer_name!</h2>
-        <p>Your order has been successfully processed and confirmed.</p>
-        <div style='background-color: #f9f9f9; padding: 15px; border-radius: 5px;'>
-            <h3>Order Details:</h3>
-            <p><strong>Order ID:</strong> #$order_id</p>
-            <p><strong>Amount Paid:</strong> KSh " . number_format($amount, 2) . "</p>
-            <p><strong>Tracking ID:</strong> $tracking_id</p>
-            <p><strong>Confirmation Code:</strong> $confirmation_code</p>
-            <p><strong>Order Status:</strong> Confirmed</p>
+        <div class='container'>
+            <div class='header'>
+                <h1>Order Confirmed!</h1>
+            </div>
+            <p>Dear $customer_name,</p>
+            <p>Thank you for your order! Your payment has been successfully processed and your order is now confirmed.</p>
+            
+            <div class='content'>
+                <h3>Order Details:</h3>
+                <div class='order-detail'><strong>Order ID:</strong> #$order_id</div>
+                <div class='order-detail'><strong>Amount Paid:</strong> KSh " . number_format($amount, 2) . "</div>
+                <div class='order-detail'><strong>Tracking ID:</strong> $tracking_id</div>
+                <div class='order-detail'><strong>Confirmation Code:</strong> $confirmation_code</div>
+                <div class='order-detail'><strong>Order Status:</strong> Confirmed</div>
+            </div>
+            
+            <p>We will notify you when your order ships. If you have any questions about your order, please contact our support team.</p>
+            
+            <div class='footer'>
+                <p>Best regards,<br><strong>Lewvitec Team</strong></p>
+                <p>Email: sales@lewvitec.com</p>
+            </div>
         </div>
-        <p>We will notify you when your order ships. If you have any questions, please contact our support team.</p>
-        <br>
-        <p>Best regards,<br>Lewvitec Team</p>
     </body>
     </html>
     ";
@@ -180,40 +205,54 @@ function sendOrderEmails($order_id, $customer_email, $customer_name, $amount, $t
     <html>
     <head>
         <title>New Order Notification</title>
+        <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #28a745; color: white; padding: 20px; text-align: center; }
+            .content { background: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0; }
+            .order-detail { margin-bottom: 10px; }
+            .order-detail strong { display: inline-block; width: 150px; }
+        </style>
     </head>
     <body>
-        <h2>New Order Received</h2>
-        <p>A new order has been successfully paid and requires processing.</p>
-        <div style='background-color: #f9f9f9; padding: 15px; border-radius: 5px;'>
-            <h3>Order Details:</h3>
-            <p><strong>Order ID:</strong> #$order_id</p>
-            <p><strong>Customer Name:</strong> $customer_name</p>
-            <p><strong>Customer Email:</strong> $customer_email</p>
-            <p><strong>Amount Paid:</strong> KSh " . number_format($amount, 2) . "</p>
-            <p><strong>Tracking ID:</strong> $tracking_id</p>
-            <p><strong>Confirmation Code:</strong> $confirmation_code</p>
+        <div class='container'>
+            <div class='header'>
+                <h1>New Order Notification</h1>
+            </div>
+            <p>A new order has been successfully paid and requires processing.</p>
+            
+            <div class='content'>
+                <h3>Order Details:</h3>
+                <div class='order-detail'><strong>Order ID:</strong> #$order_id</div>
+                <div class='order-detail'><strong>Customer Name:</strong> $customer_name</div>
+                <div class='order-detail'><strong>Customer Email:</strong> $customer_email</div>
+                <div class='order-detail'><strong>Amount Paid:</strong> KSh " . number_format($amount, 2) . "</div>
+                <div class='order-detail'><strong>Tracking ID:</strong> $tracking_id</div>
+                <div class='order-detail'><strong>Confirmation Code:</strong> $confirmation_code</div>
+            </div>
+            
+            <p>Please process this order promptly.</p>
         </div>
-        <p>Please process this order promptly.</p>
     </body>
     </html>
     ";
     
-    // Email headers
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    $headers .= "From: Lewvitec Sales <sales@lewvitec.com>" . "\r\n";
-    $headers .= "Reply-To: sales@lewvitec.com" . "\r\n";
-    
     // Send email to customer
     if (!empty($customer_email)) {
-        if (!mail($customer_email, $customer_subject, $customer_message, $headers)) {
+        $customer_sent = mail($customer_email, $customer_subject, $customer_message, $headers);
+        if (!$customer_sent) {
             file_put_contents('pesapal_callback_debug.log', "Failed to send email to customer: $customer_email" . PHP_EOL, FILE_APPEND);
+        } else {
+            file_put_contents('pesapal_callback_debug.log', "Successfully sent email to customer: $customer_email" . PHP_EOL, FILE_APPEND);
         }
     }
     
     // Send email to admin
-    if (!mail('lewvitec@gmail.com', $admin_subject, $admin_message, $headers)) {
+    $admin_sent = mail('lewvitec@gmail.com', $admin_subject, $admin_message, $headers);
+    if (!$admin_sent) {
         file_put_contents('pesapal_callback_debug.log', "Failed to send email to admin" . PHP_EOL, FILE_APPEND);
+    } else {
+        file_put_contents('pesapal_callback_debug.log', "Successfully sent email to admin" . PHP_EOL, FILE_APPEND);
     }
 }
 ?>
