@@ -2,6 +2,7 @@
 session_start();
 include('includes/config.php');
 include('pesapal_config.php');
+include('phpmailer_config.php');
 
 // === STEP 1: Validate incoming request ===
 if (!isset($_GET['OrderTrackingId']) || !isset($_GET['OrderMerchantReference'])) {
