@@ -64,8 +64,8 @@ $order_row    = mysqli_fetch_assoc($order_id_res);
 $order_id     = $order_row['id'] ?? null;
 $product_id   = $order_row['productId'] ?? null;
 $quantity     = (int)($order_row['quantity'] ?? 0);
-$customer_email = $order_row['email'] ?? '';
-$customer_name = $order_row['customerName'] ?? 'Customer';
+$customer_email = $order_row['billing_email'] ?? '';
+$customer_name = $order_row['billing_first_name'] ?? 'Customer';
 
 // === STEP 6: Normalize status ===
 $success = ($order_status === "COMPLETED" || $order_status === "SUCCESS" || 
