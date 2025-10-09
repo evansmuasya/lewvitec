@@ -153,7 +153,7 @@ function sendOrderEmails($order_id, $customer_email, $customer_name, $amount, $t
     $headers = "MIME-Version: 1.0" . "\r\n";
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
     $headers .= "From: Lewvitec Sales <sales@lewvitec.com>" . "\r\n";
-    $headers .= "Reply-To: sales@lewvitec.com" . "\r\n";
+    $headers .= "Reply-To: sales@lewvitec.co.ke" . "\r\n";
     
     // Email to customer
     $customer_subject = "Order Confirmation - Your Order #$order_id has been confirmed";
