@@ -59,11 +59,13 @@ $amount            = $data['amount'] ?? 0;
 $confirmation_code = $data['confirmation_code'] ?? '';
 
 // === STEP 5: Get internal order ID ===
-$order_id_res = mysqli_query($con, "SELECT id, productId, quantity FROM orders WHERE merchant_reference = '" . mysqli_real_escape_string($con, $merchant_reference) . "'");
+$order_id_res = mysqli_query($con, "SELECT id, productId, quantity, email, customerName FROM orders WHERE merchant_reference = '" . mysqli_real_escape_string($con, $merchant_reference) . "'");
 $order_row    = mysqli_fetch_assoc($order_id_res);
 $order_id     = $order_row['id'] ?? null;
 $product_id   = $order_row['productId'] ?? null;
 $quantity     = (int)($order_row['quantity'] ?? 0);
+$customer_email = $order_row['email'] ?? '';
+$customer_name = $order_row['customerName'] ?? 'Customer';
 
 // === STEP 6: Normalize status ===
 $success = ($order_status === "COMPLETED" || $order_status === "SUCCESS" || 
@@ -106,7 +108,7 @@ if ($order_id) {
     }
 }
 
-// === STEP 8: If payment successful, reduce stock ===
+// === STEP 8: If payment successful, reduce stock and send emails ===
 if ($success && $product_id && $quantity > 0) {
     $updateProduct = mysqli_prepare($con, "UPDATE products SET stock = GREATEST(stock - ?, 0) WHERE id = ?");
     if ($updateProduct) {
@@ -116,6 +118,9 @@ if ($success && $product_id && $quantity > 0) {
         }
         mysqli_stmt_close($updateProduct);
     }
+    
+    // Send email notifications for successful payment
+    sendOrderEmails($order_id, $customer_email, $customer_name, $amount, $tracking_id, $confirmation_code);
 }
 
 // === STEP 9: Log response for debugging ===
@@ -138,5 +143,77 @@ if ($success) {
 } else {
     header("Location: order_pending.php?order_id=" . $order_id);
     exit;
+}
+
+/**
+ * Send email notifications for successful order
+ */
+function sendOrderEmails($order_id, $customer_email, $customer_name, $amount, $tracking_id, $confirmation_code) {
+    // Email to customer
+    $customer_subject = "Order Confirmation - Your Order #$order_id has been confirmed";
+    $customer_message = "
+    <html>
+    <head>
+        <title>Order Confirmation</title>
+    </head>
+    <body>
+        <h2>Thank you for your order, $customer_name!</h2>
+        <p>Your order has been successfully processed and confirmed.</p>
+        <div style='background-color: #f9f9f9; padding: 15px; border-radius: 5px;'>
+            <h3>Order Details:</h3>
+            <p><strong>Order ID:</strong> #$order_id</p>
+            <p><strong>Amount Paid:</strong> KSh " . number_format($amount, 2) . "</p>
+            <p><strong>Tracking ID:</strong> $tracking_id</p>
+            <p><strong>Confirmation Code:</strong> $confirmation_code</p>
+            <p><strong>Order Status:</strong> Confirmed</p>
+        </div>
+        <p>We will notify you when your order ships. If you have any questions, please contact our support team.</p>
+        <br>
+        <p>Best regards,<br>Lewvitec Team</p>
+    </body>
+    </html>
+    ";
+    
+    // Email to admin
+    $admin_subject = "New Order Received - Order #$order_id";
+    $admin_message = "
+    <html>
+    <head>
+        <title>New Order Notification</title>
+    </head>
+    <body>
+        <h2>New Order Received</h2>
+        <p>A new order has been successfully paid and requires processing.</p>
+        <div style='background-color: #f9f9f9; padding: 15px; border-radius: 5px;'>
+            <h3>Order Details:</h3>
+            <p><strong>Order ID:</strong> #$order_id</p>
+            <p><strong>Customer Name:</strong> $customer_name</p>
+            <p><strong>Customer Email:</strong> $customer_email</p>
+            <p><strong>Amount Paid:</strong> KSh " . number_format($amount, 2) . "</p>
+            <p><strong>Tracking ID:</strong> $tracking_id</p>
+            <p><strong>Confirmation Code:</strong> $confirmation_code</p>
+        </div>
+        <p>Please process this order promptly.</p>
+    </body>
+    </html>
+    ";
+    
+    // Email headers
+    $headers = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    $headers .= "From: Lewvitec Sales <sales@lewvitec.com>" . "\r\n";
+    $headers .= "Reply-To: sales@lewvitec.com" . "\r\n";
+    
+    // Send email to customer
+    if (!empty($customer_email)) {
+        if (!mail($customer_email, $customer_subject, $customer_message, $headers)) {
+            file_put_contents('pesapal_callback_debug.log', "Failed to send email to customer: $customer_email" . PHP_EOL, FILE_APPEND);
+        }
+    }
+    
+    // Send email to admin
+    if (!mail('lewvitec@gmail.com', $admin_subject, $admin_message, $headers)) {
+        file_put_contents('pesapal_callback_debug.log', "Failed to send email to admin" . PHP_EOL, FILE_APPEND);
+    }
 }
 ?>
